@@ -1,0 +1,195 @@
+# Deployed AWS resources (2026-11-27T03:48:57Z), region ap-southeast-2
+
+## terraform outputs
+alb_dns = "payout-saga-51139870.ap-southeast-2.elb.amazonaws.com"
+app_security_group_id = "sg-04f2b1e9504b85a73"
+cluster_name = "payout-saga"
+db_identifier = "payout-saga"
+ecr_repository_url = "<ACCOUNT_ID>.dkr.ecr.ap-southeast-2.amazonaws.com/payout-saga"
+migrate_task_definition = "payout-saga-migrate"
+recon_schedule = "payout-saga-recon"
+state_machine_arn = "arn:aws:states:ap-southeast-2:<ACCOUNT_ID>:stateMachine:payout-saga-payout"
+subnet_ids = [
+  "subnet-08ef1ea1d908acbab",
+  "subnet-0d5cee315a9cc7287",
+]
+
+## ECS services
+------------------------------------------------------------------------------------------------------------------------------------
+|                                                         DescribeServices                                                         |
++---------+-------------+----------+-----------+-----------------------------------------------------------------------------------+
+| desired | launchType  | running  |  service  |                                  taskDefinition                                   |
++---------+-------------+----------+-----------+-----------------------------------------------------------------------------------+
+|  1      |  FARGATE    |  1       |  api      |  arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-api:1        |
+|  1      |  FARGATE    |  1       |  worker   |  arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-worker:1     |
+|  1      |  FARGATE    |  1       |  relay    |  arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-relay:1      |
+|  1      |  FARGATE    |  1       |  mocks    |  arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-mocks:1      |
+|  1      |  FARGATE    |  1       |  receiver |  arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-receiver:1   |
+|  1      |  FARGATE    |  1       |  ops-ui   |  arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-ops-ui:1     |
+|  1      |  FARGATE    |  1       |  temporal |  arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-temporal:1   |
++---------+-------------+----------+-----------+-----------------------------------------------------------------------------------+
+
+## Load balancer
+-------------------------------------------------------------
+|                   DescribeLoadBalancers                   |
++-------------+-------------------+---------+---------------+
+|    name     |      scheme       |  state  |     type      |
++-------------+-------------------+---------+---------------+
+|  payout-saga|  internet-facing  |  active |  application  |
++-------------+-------------------+---------+---------------+
+----------------------
+|  DescribeListeners |
++-------+------------+
+| port  | protocol   |
++-------+------------+
+|  8233 |  HTTP      |
+|  8080 |  HTTP      |
+|  8090 |  HTTP      |
+|  80   |  HTTP      |
+|  8095 |  HTTP      |
++-------+------------+
+
+## RDS
+-----------------------------
+|    DescribeDBInstances    |
++----------+----------------+
+|  class   |  db.t4g.micro  |
+|  engine  |  postgres      |
+|  id      |  payout-saga   |
+|  multiAZ |  False         |
+|  public  |  False         |
+|  status  |  available     |
+|  version |  17.9          |
++----------+----------------+
+
+## Lambda functions
+------------------------------------------------------------------
+|                          ListFunctions                         |
++-------+---------+--------------------------+-------------------+
+| arch  | memory  |          name            |      runtime      |
++-------+---------+--------------------------+-------------------+
+|  arm64|  256    |  payout-saga-compliance  |  provided.al2023  |
+|  arm64|  256    |  payout-saga-reserve     |  provided.al2023  |
+|  arm64|  256    |  payout-saga-capture     |  provided.al2023  |
+|  arm64|  256    |  payout-saga-cancelfx    |  provided.al2023  |
+|  arm64|  256    |  payout-saga-fx          |  provided.al2023  |
+|  arm64|  256    |  payout-saga-notify      |  provided.al2023  |
+|  arm64|  256    |  payout-saga-bank        |  provided.al2023  |
+|  arm64|  256    |  payout-saga-release     |  provided.al2023  |
+|  arm64|  256    |  payout-saga-recon       |  provided.al2023  |
++-------+---------+--------------------------+-------------------+
+
+## Step Functions
+------------------------------------
+|         ListStateMachines        |
++---------------------+------------+
+|        name         |   type     |
++---------------------+------------+
+|  payout-saga-payout |  STANDARD  |
++---------------------+------------+
+
+## EventBridge Scheduler
+-----------------------------------------------------
+|                    GetSchedule                    |
++------------------+---------------------+----------+
+|    expression    |        name         |  state   |
++------------------+---------------------+----------+
+|  rate(5 minutes) |  payout-saga-recon  |  ENABLED |
++------------------+---------------------+----------+
+
+## ECR
+---------------------------------
+|        DescribeImages         |
++-----------+-------------------+
+|  sizeMB   |       tags        |
++-----------+-------------------+
+|  1721     |  None             |
+|  1721     |  None             |
+|  52018004 |  None             |
+|  52018004 |  None             |
+|  1721     |  None             |
+|  52018004 |  None             |
+|  52018004 |  None             |
+|  1719     |  None             |
+|  52018004 |  app              |
+|  42792047 |  temporal-1.10.1  |
++-----------+-------------------+
+
+## Tagged resources (Project=payout-saga-orchestrator)
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:internet-gateway/igw-04ea132aa3fd87f05
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:route-table/rtb-0a6fbbb39f303d1df
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-01538da2da2f40fcf
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-01ae396390160f89f
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-02ca910fa440ebd71
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-0395d1fbfbdaaae90
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-03d18ebac5bb91f4b
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-04730307007cb1076
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-099fb230e70ee2de9
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-0a3c2a7b33336c607
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-0b194330fd3dbecb9
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-0e465cadcd5586d0c
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-0fbc0e34b3d5353ee
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-0fee62a2017bc6f18
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group-rule/sgr-0ff2585cc91be03ef
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group/sg-002918bff6790fca9
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group/sg-01f24d27c0a33a283
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group/sg-04f2b1e9504b85a73
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:security-group/sg-0f67b6da0cdbfa0cc
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:subnet/subnet-08ef1ea1d908acbab
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:subnet/subnet-0d5cee315a9cc7287
+arn:aws:ec2:ap-southeast-2:<ACCOUNT_ID>:vpc/vpc-0fa9e39b34215f0a9
+arn:aws:ecr:ap-southeast-2:<ACCOUNT_ID>:repository/payout-saga
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:cluster/payout-saga
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/api
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/mocks
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/ops-ui
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/receiver
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/relay
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/temporal
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/worker
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-api:1
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-migrate:1
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-mocks:1
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-ops-ui:1
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-receiver:1
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-relay:1
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-temporal:1
+arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:task-definition/payout-saga-worker:1
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:listener/app/payout-saga/bc8d2cdbbadabc2e/0db43a2938482294
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:listener/app/payout-saga/bc8d2cdbbadabc2e/280c99207772be71
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:listener/app/payout-saga/bc8d2cdbbadabc2e/870147824bda056b
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:listener/app/payout-saga/bc8d2cdbbadabc2e/896a8f31d93e8b5e
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:listener/app/payout-saga/bc8d2cdbbadabc2e/a1f7b32159d4ee89
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:loadbalancer/app/payout-saga/bc8d2cdbbadabc2e
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:targetgroup/payout-saga-api/4ca1ee5393a20803
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:targetgroup/payout-saga-mocks/a074037b3328d49b
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:targetgroup/payout-saga-ops-ui/330f99f083686d93
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:targetgroup/payout-saga-receiver/d85f3c5baef06857
+arn:aws:elasticloadbalancing:ap-southeast-2:<ACCOUNT_ID>:targetgroup/payout-saga-temporal/8df8d1df5e745577
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-bank
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-cancelfx
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-capture
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-compliance
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-fx
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-notify
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-recon
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-release
+arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-reserve
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-bank
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-cancelfx
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-capture
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-compliance
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-fx
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-notify
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-recon
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-release
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/aws/lambda/payout-saga-reserve
+arn:aws:logs:ap-southeast-2:<ACCOUNT_ID>:log-group:/ecs/payout-saga
+arn:aws:rds:ap-southeast-2:<ACCOUNT_ID>:db:payout-saga
+arn:aws:rds:ap-southeast-2:<ACCOUNT_ID>:subgrp:payout-saga
+arn:aws:servicediscovery:ap-southeast-2:<ACCOUNT_ID>:namespace/ns-n2civhm3hsbo6xn6
+arn:aws:servicediscovery:ap-southeast-2:<ACCOUNT_ID>:service/srv-ezc6zyuaj45gzka5
+arn:aws:servicediscovery:ap-southeast-2:<ACCOUNT_ID>:service/srv-jav6rjphazxbn7mc
+arn:aws:servicediscovery:ap-southeast-2:<ACCOUNT_ID>:service/srv-lnekgflyodkzjri5
+arn:aws:servicediscovery:ap-southeast-2:<ACCOUNT_ID>:service/srv-n3ptuuf6fg7bxopb
+arn:aws:states:ap-southeast-2:<ACCOUNT_ID>:stateMachine:payout-saga-payout

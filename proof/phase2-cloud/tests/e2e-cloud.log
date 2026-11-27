@@ -1,0 +1,4 @@
+=== RUN   TestCreatePayoutReachesSucceeded
+--- PASS: TestCreatePayoutReachesSucceeded (1.71s)
+PASS
+ok  	github.com/mini4141/payout-saga-orchestrator/tests/e2e	4.147s

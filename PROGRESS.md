@@ -5,7 +5,7 @@ Resume from here after a restart. Tick items as they are done.
 ## Phase status
 - [x] Phase 0 scaffold
 - [x] Phase 1 local (tests green, CI green, proof index complete)
-- [ ] Phase 2 AWS showcase
+- [x] Phase 2 AWS showcase
 - [ ] Phase 3 destroy + verify
 - [ ] Phase 4 write-up
 
@@ -16,21 +16,21 @@ Resume from here after a restart. Tick items as they are done.
 - [x] Design and code reviews (PR template + CONTRIBUTING checklist)
 - [x] Reliability over time, tech debt (reconciliation, metrics, `docs/tech-debt.md`)
 - [x] Go + relational DB design (ledger holds, outbox, idempotency)
-- [ ] Workflow orchestration: Temporal and Step Functions
+- [x] Workflow orchestration: Temporal and Step Functions
 - [x] Payments correctness (invariant checks)
-- [ ] Zero to production (full AWS deploy)
-- [ ] Stack: Go, ConnectRPC/Protobuf, Temporal, PostgreSQL, AWS, Terraform
+- [x] Zero to production (full AWS deploy)
+- [x] Stack: Go, ConnectRPC/Protobuf, Temporal, PostgreSQL, AWS, Terraform
 
 ## Stack items (CLAUDE.md §2) used in running code
 - [x] Go 1.25
 - [x] ConnectRPC + Protobuf (buf lint/breaking/generate, grpcurl/buf curl examples)
 - [x] Temporal: saga, compensation, signals, queries, child workflow, cron reconciliation
-- [ ] AWS Step Functions Standard + Go Lambdas (provided.al2023)
+- [x] AWS Step Functions Standard + Go Lambdas (provided.al2023)
 - [x] PostgreSQL 17 + pgx + sqlc + goose
 - [x] Mock services (FX, compliance, bank) with failure/latency injection admin API
 - [x] Ops UI (html/template + htmx)
 - [x] slog JSON logs, OpenTelemetry traces, Prometheus metrics
-- [ ] AWS: ECS Fargate, ALB, RDS, SFN + Lambda, EventBridge Scheduler, CloudWatch, ECR
+- [x] AWS: ECS Fargate, ALB, RDS, SFN + Lambda, EventBridge Scheduler, CloudWatch, ECR
 - [x] Terraform, GitHub Actions
 - [x] Docs: design proposal, failure-mode table, ADR Temporal vs SFN
 
@@ -52,14 +52,14 @@ Resume from here after a restart. Tick items as they are done.
 - [x] CI green on `main`
 
 ## Phase 2 proof (SPECS §10)
-- [ ] `screenshots/01-cloud-ops-ui.png`
-- [ ] `screenshots/02-cloud-timeline.png`
-- [ ] `screenshots/03-cloud-invariants.png`
-- [ ] `logs/sfn-executions.json`
-- [ ] `logs/sfn-history-compensation.json`
-- [ ] `logs/cloud-drills.log`
-- [ ] `resources.txt`
-- [ ] ASL validated with `aws stepfunctions validate-state-machine-definition`
+- [x] `screenshots/01-cloud-ops-ui.png`
+- [x] `screenshots/02-cloud-timeline.png`
+- [x] `screenshots/03-cloud-invariants.png`
+- [x] `logs/sfn-executions.json`
+- [x] `logs/sfn-history-compensation.json`
+- [x] `logs/cloud-drills.log`
+- [x] `resources.txt`
+- [x] ASL validated with `aws stepfunctions validate-state-machine-definition`
 
 ## Phase 3 proof (SPECS §11)
 - [ ] `scripts/destroy.sh` run

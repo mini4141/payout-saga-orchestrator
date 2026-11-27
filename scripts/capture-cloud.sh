@@ -45,17 +45,18 @@ E2E_API_URL="$API_URL" API_TOKEN="$API_TOKEN" go test -count=1 -v ./tests/e2e 2>
 
 log "CloudWatch graph (Lambda invocations and Step Functions executions)"
 SM_ARN="$(tf_out state_machine_arn)"
+# Labels keep the state machine ARN (which contains the account ID) out of the rendered PNG legend.
 WIDGET=$(jq -nc --arg sm "$SM_ARN" '{
   title: "Payout saga on AWS: Step Functions executions and Lambda invocations", width: 900, height: 400, view: "timeSeries", stat: "Sum", period: 60, region: "ap-southeast-2",
   start: "-PT2H", end: "PT0H",
   metrics: [
-    ["AWS/States","ExecutionsStarted","StateMachineArn",$sm],
-    ["AWS/States","ExecutionsSucceeded","StateMachineArn",$sm],
-    ["AWS/Lambda","Invocations","FunctionName","payout-saga-bank"],
-    ["AWS/Lambda","Errors","FunctionName","payout-saga-bank"],
-    ["AWS/Lambda","Invocations","FunctionName","payout-saga-recon"]
+    ["AWS/States","ExecutionsStarted","StateMachineArn",$sm,{label:"Step Functions executions started"}],
+    ["AWS/States","ExecutionsSucceeded","StateMachineArn",$sm,{label:"Step Functions executions succeeded"}],
+    ["AWS/Lambda","Invocations","FunctionName","payout-saga-bank",{label:"bank Lambda invocations"}],
+    ["AWS/Lambda","Errors","FunctionName","payout-saga-bank",{label:"bank Lambda errors (injected timeouts)"}],
+    ["AWS/Lambda","Invocations","FunctionName","payout-saga-recon",{label:"recon Lambda invocations (EventBridge Scheduler)"}]
   ]}')
-aws cloudwatch get-metric-widget-image --metric-widget "$WIDGET" --output text --query MetricWidgetImage | base64 -d >"$P/screenshots/04-cloudwatch-sfn-lambda.png" || true
+aws cloudwatch get-metric-widget-image --metric-widget "$WIDGET" --output text --query MetricWidgetImage | tr -d "[:space:]" | base64 -d >"$P/screenshots/04-cloudwatch-sfn-lambda.png" || true
 
 log "screenshots of the cloud ops UI"
 retry="$(psql_q "select payout_id from step_attempts where step='SendBankTransfer' and outcome='error' group by payout_id having count(*)>=2 order by max(id) desc limit 1")"

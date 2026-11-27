@@ -29,3 +29,9 @@ variable "temporal_image_tag" {
   type    = string
   default = "temporal-1.10.1"
 }
+
+variable "service_count" {
+  description = "Desired task count per ECS service. scripts/deploy.sh applies with 0 until images are pushed and migrations have run."
+  type        = number
+  default     = 1
+}

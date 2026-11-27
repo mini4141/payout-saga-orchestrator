@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="1">
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/tests/e2e" tests="1" failures="0" errors="0" id="0" hostname="DESKTOP-LSTSC86" time="4.147" timestamp="2026-11-27T10:49:57+07:00">
+		<testcase name="TestCreatePayoutReachesSucceeded" classname="github.com/mini4141/payout-saga-orchestrator/tests/e2e" time="1.710"></testcase>
+	</testsuite>
+</testsuites>

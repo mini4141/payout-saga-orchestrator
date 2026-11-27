@@ -1,0 +1,83 @@
+[
+  {
+    "scenario": "happy-path",
+    "payout_id": "po_c8f0a587646b4484",
+    "execution_status": "SUCCEEDED",
+    "payout_status": "SUCCEEDED",
+    "expected": "SUCCEEDED",
+    "task_failures": 0,
+    "states_entered": [
+      "Reserve",
+      "LockFX",
+      "Screen",
+      "SendBankTransfer",
+      "Capture",
+      "FinalizeSucceeded"
+    ]
+  },
+  {
+    "scenario": "bank-rejected",
+    "payout_id": "po_21f8a52e043d496e",
+    "execution_status": "SUCCEEDED",
+    "payout_status": "COMPENSATED",
+    "expected": "COMPENSATED",
+    "task_failures": 1,
+    "states_entered": [
+      "Reserve",
+      "LockFX",
+      "Screen",
+      "SendBankTransfer",
+      "CompensateCancelFX",
+      "CompensateRelease",
+      "FinalizeCompensated"
+    ]
+  },
+  {
+    "scenario": "bank-timeout-retry",
+    "payout_id": "po_34d968aeb91c473b",
+    "execution_status": "SUCCEEDED",
+    "payout_status": "SUCCEEDED",
+    "expected": "SUCCEEDED",
+    "task_failures": 2,
+    "states_entered": [
+      "Reserve",
+      "LockFX",
+      "Screen",
+      "SendBankTransfer",
+      "Capture",
+      "FinalizeSucceeded"
+    ]
+  },
+  {
+    "scenario": "compliance-blocked",
+    "payout_id": "po_4bbebd17c62c433b",
+    "execution_status": "SUCCEEDED",
+    "payout_status": "COMPENSATED",
+    "expected": "COMPENSATED",
+    "task_failures": 1,
+    "states_entered": [
+      "Reserve",
+      "LockFX",
+      "Screen",
+      "CompensateCancelFX",
+      "CompensateRelease",
+      "FinalizeCompensated"
+    ]
+  },
+  {
+    "scenario": "fx-errors-retry",
+    "payout_id": "po_287402bbc577405b",
+    "execution_status": "SUCCEEDED",
+    "payout_status": "SUCCEEDED",
+    "expected": "SUCCEEDED",
+    "task_failures": 2,
+    "states_entered": [
+      "Reserve",
+      "LockFX",
+      "Screen",
+      "SendBankTransfer",
+      "Capture",
+      "FinalizeSucceeded"
+    ]
+  }
+]

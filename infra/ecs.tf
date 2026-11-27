@@ -155,7 +155,7 @@ resource "aws_ecs_service" "svc" {
   name            = each.key
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.svc[each.key].arn
-  desired_count   = 1
+  desired_count   = var.service_count
   launch_type     = "FARGATE"
 
   network_configuration {

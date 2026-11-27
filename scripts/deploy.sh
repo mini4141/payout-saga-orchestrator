@@ -20,11 +20,9 @@ EOF
 log "[1/8] build Lambda zips"
 bash scripts/build-lambdas.sh >/dev/null
 
-log "[2/8] terraform: base (ECR, RDS, cluster, Cloud Map, migrate task)"
+log "[2/8] terraform: all infrastructure with ECS services scaled to 0 (no images in ECR yet)"
 tf init -input=false >/dev/null
-tf apply -input=false -auto-approve \
-  -target=aws_ecr_repository.app -target=aws_db_instance.main -target=aws_ecs_cluster.main \
-  -target=aws_ecs_task_definition.migrate -target=aws_service_discovery_private_dns_namespace.main
+tf apply -input=false -auto-approve -var service_count=0
 
 REPO="$(tf_out ecr_repository_url)"
 REGISTRY="${REPO%%/*}"
@@ -37,10 +35,11 @@ docker tag temporalio/temporal:1.10.1 "$REPO:temporal-1.10.1"
 docker push "$REPO:temporal-1.10.1"
 
 CLUSTER="$(tf_out cluster_name)"
-SUBNETS="$(tf output -json subnet_ids | jq -r 'join(",")')"
-SG="$(tf_out app_security_group_id)"
+# A targeted apply does not refresh outputs, so look the network pieces up by name/tag.
+SUBNETS="$(aws ec2 describe-subnets --filters "Name=tag:Project,Values=$PROJECT_TAG" --query 'Subnets[].SubnetId' --output text | tr '	' ',')"
+SG="$(aws ec2 describe-security-groups --filters "Name=group-name,Values=payout-saga-app" "Name=tag:Project,Values=$PROJECT_TAG" --query 'SecurityGroups[0].GroupId' --output text)"
 log "[4/8] run migrations + seed as a one-off Fargate task (RDS is private)"
-TASK_ARN="$(aws ecs run-task --cluster "$CLUSTER" --launch-type FARGATE --task-definition "$(tf_out migrate_task_definition)" \
+TASK_ARN="$(aws ecs run-task --cluster "$CLUSTER" --launch-type FARGATE --task-definition payout-saga-migrate \
   --network-configuration "awsvpcConfiguration={subnets=[$SUBNETS],securityGroups=[$SG],assignPublicIp=ENABLED}" \
   --query 'tasks[0].taskArn' --output text)"
 aws ecs wait tasks-stopped --cluster "$CLUSTER" --tasks "$TASK_ARN"
@@ -48,8 +47,8 @@ EXIT_CODE="$(aws ecs describe-tasks --cluster "$CLUSTER" --tasks "$TASK_ARN" --q
 log "migrate task exit code: $EXIT_CODE"
 [[ "$EXIT_CODE" == "0" ]] || { log "migration failed"; exit 1; }
 
-log "[5/8] terraform: everything else (ECS services, ALB, Lambdas, Step Functions, EventBridge Scheduler)"
-tf apply -input=false -auto-approve
+log "[5/8] terraform: start the ECS services (images are pushed and the schema exists)"
+tf apply -input=false -auto-approve -var service_count=1
 
 ALB="$(tf_out alb_dns)"
 cat >.local/cloud.env <<EOF
@@ -87,6 +86,6 @@ log "[8/8] failure drills against the cloud stack, then the Step Functions drill
   bash scripts/drill-worker-kill.sh
   bash scripts/drill-recon.sh
   bash scripts/check-invariants.sh
-} 2>&1 | redact | tee "$P/logs/cloud-drills.log"
-bash scripts/sfn-drill.sh 2>&1 | redact | tee "$P/logs/sfn-drill.log"
+} 2>&1 | redact | tee "$P/logs/cloud-drills.log" || log "WARNING: a cloud drill reported FAIL (see $P/logs/cloud-drills.log)"
+bash scripts/sfn-drill.sh 2>&1 | redact | tee "$P/logs/sfn-drill.log" || log "WARNING: the Step Functions drill reported FAIL (see $P/logs/sfn-drill.log)"
 log "deploy finished. Capture proof: scripts/capture-proof.sh phase2; then scripts/destroy.sh"

@@ -40,8 +40,8 @@ for sc in "${scenarios[@]}"; do
   aws stepfunctions get-execution-history --execution-arn "$exec_arn" --output json | redact >"$P/sfn-history-$name.json"
   final="$(payout_status "$pid")"
   states="$(jq -c '[.events[] | select(.type=="TaskStateEntered") | .stateEnteredEventDetails.name]' "$P/sfn-history-$name.json")"
-  retries="$(jq '[.events[] | select(.type=="TaskFailed")] | length' "$P/sfn-history-$name.json")"
-  log "[$name] execution=$status payout=$final retried/failed task events=$retries states=$states"
+  retries="$(jq '[.events[] | select(.type=="LambdaFunctionFailed" or .type=="LambdaFunctionTimedOut")] | length' "$P/sfn-history-$name.json")"
+  log "[$name] execution=$status payout=$final failed Lambda attempts (retried by Retry or routed by Catch)=$retries states=$states"
   expect "[$name] payout status" "$final" "$want"
   summary="$(jq -c --arg n "$name" --arg p "$pid" --arg s "$status" --arg f "$final" --arg w "$want" --argjson st "$states" --argjson r "$retries" \
     '. + [{scenario:$n, payout_id:$p, execution_status:$s, payout_status:$f, expected:$w, task_failures:$r, states_entered:$st}]' <<<"$summary")"
@@ -53,6 +53,6 @@ echo "$summary" | jq '.' | redact >"$P/sfn-executions.json"
 cp "$P/sfn-history-bank-rejected.json" "$P/sfn-history-compensation.json"
 log "compensation path in the bank-rejected execution (Catch → compensation states):"
 jq -r '[.events[] | select(.type=="TaskStateEntered") | .stateEnteredEventDetails.name] | join(" → ")' "$P/sfn-history-bank-rejected.json"
-log "retry evidence in the bank-timeout execution (TaskFailed events, then success):"
-jq -r '.events[] | select(.type=="TaskFailed" or .type=="TaskSucceeded") | "\(.id) \(.type) \(.taskFailedEventDetails.error // "")"' "$P/sfn-history-bank-timeout-retry.json" | head -12
+log "retry evidence in the bank-timeout execution (the bank Lambda is scheduled 3 times: two Transient failures, then success):"
+jq -r '.events[] | select(.type=="LambdaFunctionScheduled" or .type=="LambdaFunctionFailed" or .type=="LambdaFunctionSucceeded") | "\(.id) \(.timestamp) \(.type) \(.lambdaFunctionFailedEventDetails.error // "")"' "$P/sfn-history-bank-timeout-retry.json" | head -14
 finish

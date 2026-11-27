@@ -1,0 +1,69 @@
+INIT_START Runtime Version: provided:al2023.AmazonLinux2023.v228
+Runtime Version ARN: arn:aws:lambda:ap-southeast-2::runtime:0b1e416b0d97ff47846ecb1b6118b561a8ee9553dcec4f53b9e97c46c0910fec
+
+START RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073 Version: $LATEST
+
+{"time":"2026-11-27T03:36:11.611206119Z","level":"INFO","msg":"{\"errorMessage\":\"ERROR: relation \\\"payouts\\\" does not exist (SQLSTATE 42P01)\",\"errorType\":\"PrepareError\"}","service":"lambda-recon"}
+
+END RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073
+
+REPORT RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073
+Duration: 102.89 ms
+Billed Duration: 197 ms
+Memory Size: 256 MB
+Max Memory Used: 26 MB
+Init Duration: 93.29 ms
+
+
+START RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073 Version: $LATEST
+
+{"time":"2026-11-27T03:37:08.778916581Z","level":"INFO","msg":"{\"errorMessage\":\"ERROR: relation \\\"payouts\\\" does not exist (SQLSTATE 42P01)\",\"errorType\":\"PrepareError\"}","service":"lambda-recon"}
+
+END RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073
+
+REPORT RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073
+Duration: 6.78 ms
+Billed Duration: 7 ms
+Memory Size: 256 MB
+Max Memory Used: 26 MB
+
+
+START RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073 Version: $LATEST
+
+{"time":"2026-11-27T03:38:55.972224363Z","level":"INFO","msg":"{\"errorMessage\":\"Get \\\"http://mocks.payout.local:8090/bank/settled\\\": dial tcp: lookup mocks.payout.local on 169.254.100.5:53: no such host\",\"errorType\":\"Error\"}","service":"lambda-recon"}
+
+END RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073
+
+REPORT RequestId: e26b08fa-82ea-4c28-a74d-26381f8e8073
+Duration: 42.41 ms
+Billed Duration: 43 ms
+Memory Size: 256 MB
+Max Memory Used: 26 MB
+
+
+START RequestId: e26b08fb-aeea-4c28-a74d-26381f8e8073 Version: $LATEST
+
+{"time":"2026-11-27T03:40:48.085127827Z","level":"INFO","msg":"reconciliation","service":"lambda-recon","matched":0,"missing":0,"mismatched":0}
+
+END RequestId: e26b08fb-aeea-4c28-a74d-26381f8e8073
+
+REPORT RequestId: e26b08fb-aeea-4c28-a74d-26381f8e8073
+Duration: 36.57 ms
+Billed Duration: 37 ms
+Memory Size: 256 MB
+Max Memory Used: 26 MB
+
+
+START RequestId: e26b08fc-daea-4c28-a74d-26381f8e8073 Version: $LATEST
+
+{"time":"2026-11-27T03:45:48.102357823Z","level":"INFO","msg":"reconciliation","service":"lambda-recon","matched":15,"missing":0,"mismatched":0}
+
+END RequestId: e26b08fc-daea-4c28-a74d-26381f8e8073
+
+REPORT RequestId: e26b08fc-daea-4c28-a74d-26381f8e8073
+Duration: 53.13 ms
+Billed Duration: 54 ms
+Memory Size: 256 MB
+Max Memory Used: 26 MB
+
+

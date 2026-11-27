@@ -1,0 +1,34 @@
+03:47:19 == Step Functions drill on arn:aws:states:ap-southeast-2:<ACCOUNT_ID>:stateMachine:payout-saga-payout ==
+03:47:24 [happy-path] payout=po_c8f0a587646b4484 execution started (inject bank {})
+03:47:31 [happy-path] execution=SUCCEEDED payout=SUCCEEDED failed Lambda attempts (retried by Retry or routed by Catch)=0 states=["Reserve","LockFX","Screen","SendBankTransfer","Capture","FinalizeSucceeded"]
+03:47:31 PASS  [happy-path] payout status (got SUCCEEDED)
+03:47:37 [bank-rejected] payout=po_21f8a52e043d496e execution started (inject bank {"reject_next":1})
+03:47:45 [bank-rejected] execution=SUCCEEDED payout=COMPENSATED failed Lambda attempts (retried by Retry or routed by Catch)=1 states=["Reserve","LockFX","Screen","SendBankTransfer","CompensateCancelFX","CompensateRelease","FinalizeCompensated"]
+03:47:45 PASS  [bank-rejected] payout status (got COMPENSATED)
+03:47:51 [bank-timeout-retry] payout=po_34d968aeb91c473b execution started (inject bank {"timeout_next":2})
+03:48:17 [bank-timeout-retry] execution=SUCCEEDED payout=SUCCEEDED failed Lambda attempts (retried by Retry or routed by Catch)=2 states=["Reserve","LockFX","Screen","SendBankTransfer","Capture","FinalizeSucceeded"]
+03:48:17 PASS  [bank-timeout-retry] payout status (got SUCCEEDED)
+03:48:24 [compliance-blocked] payout=po_4bbebd17c62c433b execution started (inject compliance {"reject_next":1})
+03:48:31 [compliance-blocked] execution=SUCCEEDED payout=COMPENSATED failed Lambda attempts (retried by Retry or routed by Catch)=1 states=["Reserve","LockFX","Screen","CompensateCancelFX","CompensateRelease","FinalizeCompensated"]
+03:48:31 PASS  [compliance-blocked] payout status (got COMPENSATED)
+03:48:37 [fx-errors-retry] payout=po_287402bbc577405b execution started (inject fx {"error_next":2})
+03:48:50 [fx-errors-retry] execution=SUCCEEDED payout=SUCCEEDED failed Lambda attempts (retried by Retry or routed by Catch)=2 states=["Reserve","LockFX","Screen","SendBankTransfer","Capture","FinalizeSucceeded"]
+03:48:50 PASS  [fx-errors-retry] payout status (got SUCCEEDED)
+03:48:52 compensation path in the bank-rejected execution (Catch → compensation states):
+Reserve → LockFX → Screen → SendBankTransfer → CompensateCancelFX → CompensateRelease → FinalizeCompensated
+03:48:52 retry evidence in the bank-timeout execution (the bank Lambda is scheduled 3 times: two Transient failures, then success):
+3 2026-11-27T10:47:50.885000+07:00 LambdaFunctionScheduled 
+5 2026-11-27T10:47:50.965000+07:00 LambdaFunctionSucceeded 
+8 2026-11-27T10:47:50.979000+07:00 LambdaFunctionScheduled 
+10 2026-11-27T10:47:51.071000+07:00 LambdaFunctionSucceeded 
+13 2026-11-27T10:47:51.096000+07:00 LambdaFunctionScheduled 
+15 2026-11-27T10:47:51.184000+07:00 LambdaFunctionSucceeded 
+18 2026-11-27T10:47:51.196000+07:00 LambdaFunctionScheduled 
+20 2026-11-27T10:48:00.308000+07:00 LambdaFunctionFailed Transient
+21 2026-11-27T10:48:01.355000+07:00 LambdaFunctionScheduled 
+23 2026-11-27T10:48:10.465000+07:00 LambdaFunctionFailed Transient
+24 2026-11-27T10:48:12.505000+07:00 LambdaFunctionScheduled 
+26 2026-11-27T10:48:12.601000+07:00 LambdaFunctionSucceeded 
+29 2026-11-27T10:48:12.630000+07:00 LambdaFunctionScheduled 
+31 2026-11-27T10:48:12.718000+07:00 LambdaFunctionSucceeded 
+03:48:52 RESULT: PASS

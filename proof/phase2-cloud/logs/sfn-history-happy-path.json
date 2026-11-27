@@ -1,0 +1,377 @@
+{
+    "events": [
+        {
+            "timestamp": "2026-11-27T10:47:24.498000+07:00",
+            "type": "ExecutionStarted",
+            "id": 1,
+            "previousEventId": 0,
+            "executionStartedEventDetails": {
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "roleArn": "arn:aws:iam::<ACCOUNT_ID>:role/payout-saga-sfn"
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.516000+07:00",
+            "type": "TaskStateEntered",
+            "id": 2,
+            "previousEventId": 0,
+            "stateEnteredEventDetails": {
+                "name": "Reserve",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.516000+07:00",
+            "type": "LambdaFunctionScheduled",
+            "id": 3,
+            "previousEventId": 2,
+            "lambdaFunctionScheduledEventDetails": {
+                "resource": "arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-reserve",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "timeoutInSeconds": 20
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.567000+07:00",
+            "type": "LambdaFunctionStarted",
+            "id": 4,
+            "previousEventId": 3
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.607000+07:00",
+            "type": "LambdaFunctionSucceeded",
+            "id": 5,
+            "previousEventId": 4,
+            "lambdaFunctionSucceededEventDetails": {
+                "output": "{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.627000+07:00",
+            "type": "TaskStateExited",
+            "id": 6,
+            "previousEventId": 5,
+            "stateExitedEventDetails": {
+                "name": "Reserve",
+                "output": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.627000+07:00",
+            "type": "TaskStateEntered",
+            "id": 7,
+            "previousEventId": 6,
+            "stateEnteredEventDetails": {
+                "name": "LockFX",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.627000+07:00",
+            "type": "LambdaFunctionScheduled",
+            "id": 8,
+            "previousEventId": 7,
+            "lambdaFunctionScheduledEventDetails": {
+                "resource": "arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-fx",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "timeoutInSeconds": 20
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.673000+07:00",
+            "type": "LambdaFunctionStarted",
+            "id": 9,
+            "previousEventId": 8
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.724000+07:00",
+            "type": "LambdaFunctionSucceeded",
+            "id": 10,
+            "previousEventId": 9,
+            "lambdaFunctionSucceededEventDetails": {
+                "output": "{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.736000+07:00",
+            "type": "TaskStateExited",
+            "id": 11,
+            "previousEventId": 10,
+            "stateExitedEventDetails": {
+                "name": "LockFX",
+                "output": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.736000+07:00",
+            "type": "TaskStateEntered",
+            "id": 12,
+            "previousEventId": 11,
+            "stateEnteredEventDetails": {
+                "name": "Screen",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.736000+07:00",
+            "type": "LambdaFunctionScheduled",
+            "id": 13,
+            "previousEventId": 12,
+            "lambdaFunctionScheduledEventDetails": {
+                "resource": "arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-compliance",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "timeoutInSeconds": 20
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.769000+07:00",
+            "type": "LambdaFunctionStarted",
+            "id": 14,
+            "previousEventId": 13
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.825000+07:00",
+            "type": "LambdaFunctionSucceeded",
+            "id": 15,
+            "previousEventId": 14,
+            "lambdaFunctionSucceededEventDetails": {
+                "output": "{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.839000+07:00",
+            "type": "TaskStateExited",
+            "id": 16,
+            "previousEventId": 15,
+            "stateExitedEventDetails": {
+                "name": "Screen",
+                "output": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.839000+07:00",
+            "type": "TaskStateEntered",
+            "id": 17,
+            "previousEventId": 16,
+            "stateEnteredEventDetails": {
+                "name": "SendBankTransfer",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.839000+07:00",
+            "type": "LambdaFunctionScheduled",
+            "id": 18,
+            "previousEventId": 17,
+            "lambdaFunctionScheduledEventDetails": {
+                "resource": "arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-bank",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "timeoutInSeconds": 20
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.917000+07:00",
+            "type": "LambdaFunctionStarted",
+            "id": 19,
+            "previousEventId": 18
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.962000+07:00",
+            "type": "LambdaFunctionSucceeded",
+            "id": 20,
+            "previousEventId": 19,
+            "lambdaFunctionSucceededEventDetails": {
+                "output": "{\"step\":\"SendBankTransfer\",\"replayed\":false,\"attempt\":1,\"data\":{\"amount_minor\":15000,\"currency\":\"USD\",\"reference\":\"po_c8f0a587646b4484\",\"status\":\"SETTLED\",\"transfer_id\":\"txn_000045\"}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.978000+07:00",
+            "type": "TaskStateExited",
+            "id": 21,
+            "previousEventId": 20,
+            "stateExitedEventDetails": {
+                "name": "SendBankTransfer",
+                "output": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}},\"bank\":{\"step\":\"SendBankTransfer\",\"replayed\":false,\"attempt\":1,\"data\":{\"amount_minor\":15000,\"currency\":\"USD\",\"reference\":\"po_c8f0a587646b4484\",\"status\":\"SETTLED\",\"transfer_id\":\"txn_000045\"}}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.978000+07:00",
+            "type": "TaskStateEntered",
+            "id": 22,
+            "previousEventId": 21,
+            "stateEnteredEventDetails": {
+                "name": "Capture",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}},\"bank\":{\"step\":\"SendBankTransfer\",\"replayed\":false,\"attempt\":1,\"data\":{\"amount_minor\":15000,\"currency\":\"USD\",\"reference\":\"po_c8f0a587646b4484\",\"status\":\"SETTLED\",\"transfer_id\":\"txn_000045\"}}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:24.978000+07:00",
+            "type": "LambdaFunctionScheduled",
+            "id": 23,
+            "previousEventId": 22,
+            "lambdaFunctionScheduledEventDetails": {
+                "resource": "arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-capture",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "timeoutInSeconds": 20
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.005000+07:00",
+            "type": "LambdaFunctionStarted",
+            "id": 24,
+            "previousEventId": 23
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.050000+07:00",
+            "type": "LambdaFunctionSucceeded",
+            "id": 25,
+            "previousEventId": 24,
+            "lambdaFunctionSucceededEventDetails": {
+                "output": "{\"step\":\"Capture\",\"replayed\":false,\"attempt\":1,\"data\":{\"captured_minor\":15000}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.070000+07:00",
+            "type": "TaskStateExited",
+            "id": 26,
+            "previousEventId": 25,
+            "stateExitedEventDetails": {
+                "name": "Capture",
+                "output": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}},\"bank\":{\"step\":\"SendBankTransfer\",\"replayed\":false,\"attempt\":1,\"data\":{\"amount_minor\":15000,\"currency\":\"USD\",\"reference\":\"po_c8f0a587646b4484\",\"status\":\"SETTLED\",\"transfer_id\":\"txn_000045\"}},\"capture\":{\"step\":\"Capture\",\"replayed\":false,\"attempt\":1,\"data\":{\"captured_minor\":15000}}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.070000+07:00",
+            "type": "TaskStateEntered",
+            "id": 27,
+            "previousEventId": 26,
+            "stateEnteredEventDetails": {
+                "name": "FinalizeSucceeded",
+                "input": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}},\"bank\":{\"step\":\"SendBankTransfer\",\"replayed\":false,\"attempt\":1,\"data\":{\"amount_minor\":15000,\"currency\":\"USD\",\"reference\":\"po_c8f0a587646b4484\",\"status\":\"SETTLED\",\"transfer_id\":\"txn_000045\"}},\"capture\":{\"step\":\"Capture\",\"replayed\":false,\"attempt\":1,\"data\":{\"captured_minor\":15000}}}}",
+                "inputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.070000+07:00",
+            "type": "LambdaFunctionScheduled",
+            "id": 28,
+            "previousEventId": 27,
+            "lambdaFunctionScheduledEventDetails": {
+                "resource": "arn:aws:lambda:ap-southeast-2:<ACCOUNT_ID>:function:payout-saga-notify",
+                "input": "{\"outcome\":\"SUCCEEDED\",\"reason\":\"\",\"payout_id\":\"po_c8f0a587646b4484\"}",
+                "inputDetails": {
+                    "truncated": false
+                },
+                "timeoutInSeconds": 20
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.104000+07:00",
+            "type": "LambdaFunctionStarted",
+            "id": 29,
+            "previousEventId": 28
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.141000+07:00",
+            "type": "LambdaFunctionSucceeded",
+            "id": 30,
+            "previousEventId": 29,
+            "lambdaFunctionSucceededEventDetails": {
+                "output": "{\"step\":\"Finalize\",\"replayed\":false,\"attempt\":1,\"data\":{\"event\":\"payout.succeeded\",\"status\":\"SUCCEEDED\"}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.157000+07:00",
+            "type": "TaskStateExited",
+            "id": 31,
+            "previousEventId": 30,
+            "stateExitedEventDetails": {
+                "name": "FinalizeSucceeded",
+                "output": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}},\"bank\":{\"step\":\"SendBankTransfer\",\"replayed\":false,\"attempt\":1,\"data\":{\"amount_minor\":15000,\"currency\":\"USD\",\"reference\":\"po_c8f0a587646b4484\",\"status\":\"SETTLED\",\"transfer_id\":\"txn_000045\"}},\"capture\":{\"step\":\"Capture\",\"replayed\":false,\"attempt\":1,\"data\":{\"captured_minor\":15000}},\"finalize\":{\"step\":\"Finalize\",\"replayed\":false,\"attempt\":1,\"data\":{\"event\":\"payout.succeeded\",\"status\":\"SUCCEEDED\"}}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        },
+        {
+            "timestamp": "2026-11-27T10:47:25.189000+07:00",
+            "type": "ExecutionSucceeded",
+            "id": 32,
+            "previousEventId": 31,
+            "executionSucceededEventDetails": {
+                "output": "{\"payout_id\":\"po_c8f0a587646b4484\",\"steps\":{\"reserve\":{\"step\":\"Reserve\",\"replayed\":false,\"attempt\":1,\"data\":{\"held_minor\":15000}},\"fx\":{\"step\":\"LockFX\",\"replayed\":false,\"attempt\":1,\"data\":{\"expires_at\":\"2026-11-27T03:57:24Z\",\"from\":\"AUD\",\"quote_id\":\"fxq_000044\",\"rate\":0.65,\"to\":\"USD\"}},\"compliance\":{\"step\":\"Screen\",\"replayed\":false,\"attempt\":1,\"data\":{\"decision\":\"CLEAR\",\"screened_at\":\"2026-11-27T03:47:24Z\"}},\"bank\":{\"step\":\"SendBankTransfer\",\"replayed\":false,\"attempt\":1,\"data\":{\"amount_minor\":15000,\"currency\":\"USD\",\"reference\":\"po_c8f0a587646b4484\",\"status\":\"SETTLED\",\"transfer_id\":\"txn_000045\"}},\"capture\":{\"step\":\"Capture\",\"replayed\":false,\"attempt\":1,\"data\":{\"captured_minor\":15000}},\"finalize\":{\"step\":\"Finalize\",\"replayed\":false,\"attempt\":1,\"data\":{\"event\":\"payout.succeeded\",\"status\":\"SUCCEEDED\"}}}}",
+                "outputDetails": {
+                    "truncated": false
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,96 @@
+03:41:00 == drill: bank rejects the transfer ==
+03:41:05 created payout po_9c89ecc8d39943ba
+03:41:06 attempt timeline:
+1|Reserve|1|ok|
+2|LockFX|1|ok|
+3|Screen|1|ok|
+4|SendBankTransfer|1|error|bank rejected payout po_9c89ecc8d39943ba: insufficient correspondent funds (injected)
+5|CancelFX|1|ok|
+6|Release|1|ok|
+7|Finalize|1|ok|
+03:41:09 PASS  payout ends COMPENSATED (got COMPENSATED)
+03:41:10 PASS  hold released (no hold row) (got 0)
+03:41:11 PASS  merchant balance unchanged (got 3000000)
+03:41:12 PASS  no debit entry written (got 0)
+03:41:13 PASS  FX lock cancelled at the mock (got 1)
+03:41:14 PASS  compensations ran in reverse order (got CancelFX>Release)
+03:41:15 PASS  bank was not retried after BankRejected (SendBankTransfer attempts) (got 1)
+03:41:18 PASS  payout.failed event written to the outbox (got 1)
+03:41:18 RESULT: PASS
+03:41:18 == drill: bank timeout, retry with backoff, then success ==
+03:41:21 created payout po_73281503f3274d6d (takes ~25 s: two 9 s client timeouts plus 1 s and 2 s backoff)
+03:41:43 attempt timeline:
+11|SendBankTransfer|1|error|Post "http://mocks.payout.local:8090/bank/transfer": context deadline exceeded (Client.Timeout excee|9002
+12|SendBankTransfer|2|error|Post "http://mocks.payout.local:8090/bank/transfer": context deadline exceeded (Client.Timeout excee|9002
+13|SendBankTransfer|3|ok||8
+03:41:47 PASS  payout SUCCEEDED (got SUCCEEDED)
+03:41:48 PASS  SendBankTransfer attempts (2 timeouts + 1 success) (got 3)
+03:41:49 PASS  failed attempts (got 2)
+03:41:50 PASS  bank holds exactly one settled transfer for the payout (got 1)
+03:41:50 PASS  retries were idempotent replays at the bank (>=2) (got 1)
+03:41:51 PASS  exactly one debit (got 1)
+03:41:51 RESULT: PASS
+03:41:51 == drill: kill the worker during SendBankTransfer ==
+03:42:03 created 10 payouts: po_c630eb8e2277499e po_5d1c9fe9fff04324 po_0af212c786c0414d po_907d895e45574966 po_09d1516aa18f4904 po_ab253a67ad124fe1 po_dfdf4eb77d704252 po_5c1670d7b0444af3 po_605b3816055d45d4 po_9c7b6cf065f24e26
+03:42:03 waiting until transfers are in flight at the bank
+03:42:04 bank in-flight transfers: 10; killing worker NOW
+03:42:14 worker is down; payouts in flight:
+po_09d1516aa18f4904|SUCCEEDED
+po_0af212c786c0414d|SUCCEEDED
+po_5c1670d7b0444af3|PROCESSING
+po_5d1c9fe9fff04324|SUCCEEDED
+po_605b3816055d45d4|PROCESSING
+po_907d895e45574966|SUCCEEDED
+po_9c7b6cf065f24e26|PROCESSING
+po_ab253a67ad124fe1|SUCCEEDED
+po_c630eb8e2277499e|SUCCEEDED
+po_dfdf4eb77d704252|SUCCEEDED
+03:42:15 restarting worker
+03:42:15 ECS service replaces the stopped worker task; waiting for it to be running
+03:42:43 final statuses:
+SUCCEEDED|10
+03:42:44 SendBankTransfer attempts per payout (a 'lost' attempt is the one the killed worker never finished):
+po_09d1516aa18f4904|1:error 2:ok
+po_0af212c786c0414d|1:error 2:ok
+po_5c1670d7b0444af3|1:error 2:ok
+po_5d1c9fe9fff04324|1:error 2:ok
+po_605b3816055d45d4|1:error 2:ok
+po_907d895e45574966|1:error 2:ok
+po_9c7b6cf065f24e26|1:error 2:ok
+po_ab253a67ad124fe1|1:error 2:ok
+po_c630eb8e2277499e|1:error 2:ok
+po_dfdf4eb77d704252|1:error 2:ok
+03:42:46 bank state: {"bank_transfers":12,"bank_settled":11,"idempotent_replays":{"bank":12},"calls":{"bank":24,"compliance":12,"fx":13}}
+03:42:48 PASS  all 10 payouts SUCCEEDED (got 10)
+03:42:49 PASS  exactly one debit per payout (no double spend) (got 10)
+03:42:50 PASS  payouts with more than one debit (got 0)
+03:42:51 PASS  bank settled each of the 10 payouts exactly once (got 10)
+03:42:51 PASS  retries after the kill were served by the bank's idempotency record (>0) (got 1)
+03:42:51 RESULT: PASS
+03:42:51 == drill: reconciliation detects a seeded mismatch ==
+03:42:53 1) baseline run
+03:42:58 PASS  baseline: missing (got 0)
+03:42:58 PASS  baseline: mismatched (got 0)
+03:42:58    matched=11
+03:42:58 2) seed a transfer at the bank that the ledger knows nothing about
+{"transfer_id":"txn_seed_025","reference":"po_seeded_mismatch","amount_minor":99999,"currency":"USD","status":"SETTLED"}
+
+03:43:04    report details: ["settled at bank without a succeeded payout: po_seeded_mismatch"]
+03:43:04 PASS  seeded mismatch is reported (mismatched) (got 1)
+03:43:04 3) remove the seeded transfer, reconciliation is clean again
+03:43:10 PASS  clean again: missing+mismatched (got 0)
+03:43:11 RESULT: PASS
+03:43:11 == invariant check ==
+03:43:12 PASS  balance = sum(entries) for every merchant (violations) (got 0)
+03:43:13 PASS  balance covers open holds (violations) (got 0)
+03:43:14 PASS  no payout stuck in PENDING/PROCESSING (got 0)
+03:43:15 PASS  no hold left behind for a finished payout (got 0)
+03:43:16 PASS  every SUCCEEDED payout has exactly one debit entry (violations) (got 0)
+03:43:17 PASS  no COMPENSATED payout was debited (got 0)
+03:43:19 PASS  bank settled references == SUCCEEDED payouts (no duplicates, none missing) (got 44152917c6a7f73f00e7e79c6b897e84)
+03:43:20 PASS  bank settled count (got 11)
+03:43:22 PASS  FX quotes cancelled == CancelFX compensations run (got 1)
+03:43:23 PASS  outbox rows still unsent (got 0)
+03:43:24 PASS  exactly one outbox event per finished payout (violations) (got 0)
+03:43:26 PASS  receiver delivered events == outbox events (got 12)
+03:43:26 RESULT: PASS
