@@ -1,0 +1,62 @@
+03:50:59 identity: arn:aws:iam::<ACCOUNT_ID>:user/payout-saga-orchestrator-deployer
+03:51:11 scaling arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/mocks to 0
+03:51:14 scaling arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/temporal to 0
+03:51:18 scaling arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/relay to 0
+03:51:21 scaling arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/ops-ui to 0
+03:51:24 scaling arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/receiver to 0
+03:51:27 scaling arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/worker to 0
+03:51:30 scaling arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/api to 0
+aws_vpc_security_group_ingress_rule.app_from_alb: Destroying... [id=sgr-02ca910fa440ebd71]
+aws_vpc_security_group_egress_rule.alb: Destroying... [id=sgr-0395d1fbfbdaaae90]
+aws_vpc_security_group_egress_rule.app_all: Destroying... [id=sgr-03d18ebac5bb91f4b]
+aws_vpc_security_group_ingress_rule.alb["8090"]: Destroying... [id=sgr-0b194330fd3dbecb9]
+aws_scheduler_schedule.recon: Destroying... [id=default/payout-saga-recon]
+aws_iam_role_policy.scheduler_invoke: Destroying... [id=payout-saga-scheduler:terraform-e72a6ca98d3009ded215cc685a]
+aws_ecs_service.svc["relay"]: Destroying... [id=arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/relay]
+aws_ecs_service.svc["api"]: Destroying... [id=arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/api]
+aws_ecs_service.svc["temporal"]: Destroying... [id=arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/temporal]
+aws_ecs_service.svc["worker"]: Destroying... [id=arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/worker]
+aws_iam_role_policy.scheduler_invoke: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.alb["8095"]: Destroying... [id=sgr-0a3c2a7b33336c607]
+aws_scheduler_schedule.recon: Destruction complete after 1s
+aws_ecs_service.svc["ops-ui"]: Destroying... [id=arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/ops-ui]
+aws_vpc_security_group_egress_rule.alb: Destruction complete after 2s
+aws_vpc_security_group_ingress_rule.app_from_alb: Destruction complete after 2s
+aws_vpc_security_group_egress_rule.app_all: Destruction complete after 2s
+aws_iam_role_policy_attachment.task_execution: Destroying... [id=payout-saga-task-execution/arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy]
+aws_vpc_security_group_ingress_rule.alb["8090"]: Destruction complete after 2s
+aws_vpc_security_group_ingress_rule.alb["8233"]: Destroying... [id=sgr-099fb230e70ee2de9]
+aws_iam_role_policy.sfn_invoke: Destroying... [id=payout-saga-sfn:terraform-eba92e6da9a93157c536d43780]
+aws_vpc_security_group_ingress_rule.db_from_lambda: Destroying... [id=sgr-0ff2585cc91be03ef]
+aws_iam_role_policy_attachment.task_execution: Destruction complete after 0s
+aws_route_table_association.public[1]: Destroying... [id=rtbassoc-0bd<ACCOUNT_ID>06]
+aws_vpc_security_group_ingress_rule.alb["8095"]: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.app_self: Destroying... [id=sgr-01538da2da2f40fcf]
+aws_vpc_security_group_ingress_rule.alb["8233"]: Destruction complete after 0s
+aws_ecs_service.svc["receiver"]: Destroying... [id=arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/receiver]
+aws_vpc_security_group_ingress_rule.db_from_lambda: Destruction complete after 0s
+aws_vpc_security_group_ingress_rule.db_from_app: Destroying... [id=sgr-0e465cadcd5586d0c]
+aws_iam_role_policy.sfn_invoke: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.app_from_lambda: Destroying... [id=sgr-0fee62a2017bc6f18]
+aws_vpc_security_group_ingress_rule.app_self: Destruction complete after 1s
+aws_vpc_security_group_egress_rule.lambda_all: Destroying... [id=sgr-04730307007cb1076]
+aws_vpc_security_group_ingress_rule.app_from_lambda: Destruction complete after 0s
+aws_vpc_security_group_ingress_rule.db_from_app: Destruction complete after 0s
+aws_route_table_association.public[1]: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.alb["8080"]: Destroying... [id=sgr-01ae396390160f89f]
+aws_route_table_association.public[0]: Destroying... [id=rtbassoc-0ce6dd51498eb6b20]
+aws_sfn_state_machine.payout: Destroying... [id=arn:aws:states:ap-southeast-2:<ACCOUNT_ID>:stateMachine:payout-saga-payout]
+aws_vpc_security_group_egress_rule.lambda_all: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.alb["8080"]: Destruction complete after 1s
+aws_ecs_service.svc["mocks"]: Destroying... [id=arn:aws:ecs:ap-southeast-2:<ACCOUNT_ID>:service/payout-saga/mocks]
+aws_ecs_task_definition.migrate: Destroying... [id=payout-saga-migrate]
+aws_route_table_association.public[0]: Destruction complete after 1s
+aws_vpc_security_group_ingress_rule.alb["80"]: Destroying... [id=sgr-0fbc0e34b3d5353ee]
+aws_ecs_task_definition.migrate: Destruction complete after 0s
+aws_iam_role.scheduler: Destroying... [id=payout-saga-scheduler]
+aws_vpc_security_group_ingress_rule.alb["80"]: Destruction complete after 1s
+aws_route_table.public: Destroying... [id=rtb-0a6fbbb39f303d1df]
+aws_iam_role.scheduler: Destruction complete after 1s
+aws_route_table.public: Destruction complete after 2s
+Destroy complete! Resources: 89 destroyed.
+04:15:26 destroy finished; run scripts/verify-destroyed.sh

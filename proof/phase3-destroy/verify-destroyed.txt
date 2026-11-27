@@ -1,0 +1,18 @@
+== verify-destroyed 2026-11-27T04:22:50Z region=ap-southeast-2 profile=payout-saga-orchestrator-deployer ==
+OK      Step Functions state machines: none
+OK      Lambda functions: none
+OK      ECS cluster: none
+OK      Load balancers: none
+OK      Target groups: none
+OK      RDS instances: none
+OK      EventBridge Scheduler schedules: none
+OK      ECR repositories: none
+OK      NAT gateways (tagged): none
+OK      VPCs (tagged): none
+OK      Elastic IPs (tagged): none
+OK      CloudWatch log groups: none
+OK      Cloud Map namespaces: none
+OK      IAM roles: none
+-- tagging API (Project=payout-saga-orchestrator); retrying while it catches up --
+OK      tagged resources that still exist: none (29 stale tagging-index entries, confirmed gone by direct describe)
+RESULT: PASS (nothing billable remains)

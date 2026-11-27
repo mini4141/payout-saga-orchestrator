@@ -45,6 +45,7 @@ alive() {
     *:ec2:*:vpc/*)               aws ec2 describe-vpcs --vpc-ids "$id" >/dev/null 2>&1 ;;
     *:ec2:*:subnet/*)            aws ec2 describe-subnets --subnet-ids "$id" >/dev/null 2>&1 ;;
     *:ec2:*:security-group/*)    aws ec2 describe-security-groups --group-ids "$id" >/dev/null 2>&1 ;;
+    *:ec2:*:security-group-rule/*) aws ec2 describe-security-group-rules --security-group-rule-ids "$id" >/dev/null 2>&1 ;;
     *:ec2:*:internet-gateway/*)  aws ec2 describe-internet-gateways --internet-gateway-ids "$id" >/dev/null 2>&1 ;;
     *:ec2:*:route-table/*)       aws ec2 describe-route-tables --route-table-ids "$id" >/dev/null 2>&1 ;;
     *:ecs:*:cluster/*)           [[ -n "$(aws ecs describe-clusters --clusters "$id" --query 'clusters[?status!=`INACTIVE`].clusterName' --output text)" ]] ;;

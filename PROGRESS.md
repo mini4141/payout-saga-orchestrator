@@ -6,8 +6,8 @@ Resume from here after a restart. Tick items as they are done.
 - [x] Phase 0 scaffold
 - [x] Phase 1 local (tests green, CI green, proof index complete)
 - [x] Phase 2 AWS showcase
-- [ ] Phase 3 destroy + verify
-- [ ] Phase 4 write-up
+- [x] Phase 3 destroy + verify
+- [x] Phase 4 write-up
 
 ## Requirement coverage matrix (SPECS §2)
 - [x] Go backend services: data model → schema → deploy → operate
@@ -62,10 +62,10 @@ Resume from here after a restart. Tick items as they are done.
 - [x] ASL validated with `aws stepfunctions validate-state-machine-definition`
 
 ## Phase 3 proof (SPECS §11)
-- [ ] `scripts/destroy.sh` run
-- [ ] `proof/phase3-destroy/verify-destroyed.txt` shows nothing billable
+- [x] `scripts/destroy.sh` run
+- [x] `proof/phase3-destroy/verify-destroyed.txt` shows nothing billable
 
 ## Phase 4
-- [ ] `docs/PORTFOLIO.md`
-- [ ] `README.md` final
-- [ ] Everything committed and pushed
+- [x] `docs/PORTFOLIO.md`
+- [x] `README.md` final
+- [x] Everything committed and pushed
