@@ -1,0 +1,2 @@
+outbox_published_total{result="sent",type="payout.failed"} 1
+outbox_published_total{result="sent",type="payout.succeeded"} 12

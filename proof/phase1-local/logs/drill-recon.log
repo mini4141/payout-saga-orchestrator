@@ -1,0 +1,13 @@
+03:03:33 == drill: reconciliation detects a seeded mismatch ==
+03:03:34 1) baseline run
+03:03:38 PASS  baseline: missing (got 0)
+03:03:38 PASS  baseline: mismatched (got 0)
+03:03:38    matched=12
+03:03:38 2) seed a transfer at the bank that the ledger knows nothing about
+{"transfer_id":"txn_seed_027","reference":"po_seeded_mismatch","amount_minor":99999,"currency":"USD","status":"SETTLED"}
+
+03:03:42    report details: ["settled at bank without a succeeded payout: po_seeded_mismatch"]
+03:03:42 PASS  seeded mismatch is reported (mismatched) (got 1)
+03:03:42 3) remove the seeded transfer, reconciliation is clean again
+03:03:47 PASS  clean again: missing+mismatched (got 0)
+03:03:47 RESULT: PASS

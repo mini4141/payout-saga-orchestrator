@@ -1,0 +1,14 @@
+03:03:47 == invariant check ==
+03:03:48 PASS  balance = sum(entries) for every merchant (violations) (got 0)
+03:03:49 PASS  balance covers open holds (violations) (got 0)
+03:03:50 PASS  no payout stuck in PENDING/PROCESSING (got 0)
+03:03:51 PASS  no hold left behind for a finished payout (got 0)
+03:03:52 PASS  every SUCCEEDED payout has exactly one debit entry (violations) (got 0)
+03:03:54 PASS  no COMPENSATED payout was debited (got 0)
+03:03:56 PASS  bank settled references == SUCCEEDED payouts (no duplicates, none missing) (got cd2c317a1fd66f05dfc6e5583a57beab)
+03:03:58 PASS  bank settled count (got 12)
+03:03:59 PASS  FX quotes cancelled == CancelFX compensations run (got 1)
+03:04:00 PASS  outbox rows still unsent (got 0)
+03:04:01 PASS  exactly one outbox event per finished payout (violations) (got 0)
+03:04:02 PASS  receiver delivered events == outbox events (got 13)
+03:04:02 RESULT: PASS

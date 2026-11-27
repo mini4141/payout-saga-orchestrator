@@ -1,0 +1,28 @@
+{{define "payout.html"}}{{template "head" .}}
+<p><a href="/">← all payouts</a></p>
+<div id="body" hx-get="/fragments/payouts/{{.P.ID}}" hx-trigger="every 2s" hx-swap="innerHTML">
+{{template "payout_body" .}}
+</div>
+{{template "foot"}}{{end}}
+
+{{define "payout_body"}}
+<h1><span class="mono">{{.P.ID}}</span> <span class="chip {{lower .P.Status}}">{{.P.Status}}</span></h1>
+<p class="sub">{{.P.MerchantID}} · {{money .P.AmountMinor}} {{.P.Currency}} → {{.P.TargetCurrency}} · engine {{.P.Engine}} · key <code>{{.P.IdempotencyKey}}</code>
+{{if eq .P.Engine "temporal"}} · <a href="{{.TemporalURL}}" target="_blank">Temporal workflow</a>{{end}}</p>
+
+{{if .Compensations}}<div class="card"><b>Compensations run (reverse order):</b>
+{{range .Compensations}} <span class="chip compensated">{{.}}</span>{{end}}</div>{{end}}
+
+<h2>Step timeline</h2>
+<table>
+<tr><th>Started</th><th>Step</th><th class="num">Attempt</th><th>Outcome</th><th class="num">Duration</th><th></th><th>Error</th></tr>
+{{range .Timeline}}
+<tr><td class="mono">{{ts .StartedAt}}</td><td>{{.Step}}</td><td class="num">{{.Attempt}}</td>
+<td><span class="chip {{if eq .Label "lost (worker died)"}}lost{{else}}{{lower .Label}}{{end}}">{{.Label}}</span></td>
+<td class="num">{{.DurationMs}} ms</td><td><div class="bar"><i style="width:{{.Bar}}%"></i></div></td><td class="mono">{{.Error}}</td></tr>
+{{else}}<tr><td colspan="7">Waiting for the first step…</td></tr>{{end}}
+</table>
+
+<h2>Stored step results (idempotency records)</h2>
+{{range .Results}}<div class="pre"><b>{{.Step}}</b> {{.JSON}}</div><br>{{end}}
+{{end}}

@@ -1,0 +1,16 @@
+{{define "recon.html"}}{{template "head" .}}
+<h1>Reconciliation</h1>
+<p class="sub">Temporal cron workflow <code>reconciliation-cron</code> (<code>{{.Cron}}</code>) compares SUCCEEDED payouts with the bank's settled list.</p>
+<p>
+<form class="inline" method="post" action="/recon/run"><button type="submit">Run now</button></form>
+<form class="inline" method="post" action="/recon/seed-mismatch"><button class="ghost" type="submit">Seed a mismatch at the bank</button></form>
+</p>
+<table>
+<tr><th>Report</th><th>Run at</th><th class="num">Matched</th><th class="num">Missing</th><th class="num">Mismatched</th><th>Verdict</th><th>Details</th></tr>
+{{range .Reports}}
+<tr><td>#{{.ID}}</td><td class="mono">{{ts .RunAt}}</td><td class="num">{{.Matched}}</td><td class="num">{{.Missing}}</td><td class="num">{{.Mismatched}}</td>
+<td>{{if or .Missing .Mismatched}}<span class="chip bad">DISCREPANCY</span>{{else}}<span class="chip ok">CLEAN</span>{{end}}</td>
+<td class="mono">{{range .Lines}}{{.}}<br>{{end}}</td></tr>
+{{else}}<tr><td colspan="7">No reports yet.</td></tr>{{end}}
+</table>
+{{template "foot"}}{{end}}

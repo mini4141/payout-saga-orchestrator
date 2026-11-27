@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package payout.v1;
+
+option go_package = "github.com/mini4141/payout-saga-orchestrator/gen/payout/v1;payoutv1";
+
+// PayoutService creates and inspects merchant payouts.
+service PayoutService {
+  // CreatePayout starts a payout. Repeating an idempotency_key returns the same payout.
+  rpc CreatePayout(CreatePayoutRequest) returns (CreatePayoutResponse);
+  rpc GetPayout(GetPayoutRequest) returns (GetPayoutResponse);
+  rpc ListPayouts(ListPayoutsRequest) returns (ListPayoutsResponse);
+  // CancelPayout signals the workflow; it is honoured only before the bank transfer step.
+  rpc CancelPayout(CancelPayoutRequest) returns (CancelPayoutResponse);
+}
+
+message Payout {
+  string id = 1;
+  string merchant_id = 2;
+  int64 amount_minor = 3;
+  string currency = 4;
+  string target_currency = 5;
+  string bank_account = 6;
+  string status = 7;
+  string idempotency_key = 8;
+  string created_at = 9;
+  string engine = 10;
+}
+
+message StepAttempt {
+  string step = 1;
+  int32 attempt = 2;
+  string outcome = 3;
+  string error = 4;
+  string started_at = 5;
+  int64 duration_ms = 6;
+}
+
+message CreatePayoutRequest {
+  string merchant_id = 1;
+  int64 amount_minor = 2;
+  string currency = 3;
+  string target_currency = 4;
+  string bank_account = 5;
+  string idempotency_key = 6;
+  // engine is "temporal" (default) or "sfn"; for "sfn" the caller starts the state machine.
+  string engine = 7;
+}
+
+message CreatePayoutResponse {
+  string payout_id = 1;
+  string status = 2;
+  // created is false when the idempotency key was seen before.
+  bool created = 3;
+}
+
+message GetPayoutRequest {
+  string payout_id = 1;
+}
+
+message GetPayoutResponse {
+  Payout payout = 1;
+  repeated StepAttempt attempts = 2;
+  // current_step is the workflow query answer while the payout is running.
+  string current_step = 3;
+}
+
+message ListPayoutsRequest {
+  int32 limit = 1;
+}
+
+message ListPayoutsResponse {
+  repeated Payout payouts = 1;
+}
+
+message CancelPayoutRequest {
+  string payout_id = 1;
+}
+
+message CancelPayoutResponse {
+  bool accepted = 1;
+  string detail = 2;
+}

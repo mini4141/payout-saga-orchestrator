@@ -1,0 +1,73 @@
+$ buf curl (Connect protocol, schema from ./proto)
+{
+  "payouts": [
+    {
+      "id": "po_ab926e8ca41648f8",
+      "merchantId": "m_ember",
+      "amountMinor": "29000",
+      "currency": "AUD",
+      "targetCurrency": "USD",
+      "bankAccount": "062-000-1234",
+      "status": "SUCCEEDED",
+      "idempotencyKey": "k-1795748590760882100-20669",
+      "createdAt": "2026-11-27T03:03:10Z",
+      "engine": "temporal"
+    },
+    {
+      "id": "po_ea1e83dad2e94083",
+      "merchantId": "m_delta",
+      "amountMinor": "28000",
+      "currency": "AUD",
+      "targetCurrency": "USD",
+      "bankAccount": "062-000-1234",
+      "status": "SUCCEEDED",
+      "idempotencyKey": "k-1795748590515645000-10316",
+      "createdAt": "2026-11-27T03:03:10Z",
+      "engine": "temporal"
+    },
+    {
+      "id": "po_da15d458f26d4f59",
+      "merchantId": "m_cobalt",
+      "amountMinor": "27000",
+      "currency": "AUD",
+      "targetCurrency": "USD",
+      "bankAccount": "062-000-1234",
+      "status": "SUCCEEDED",
+      "idempotencyKey": "k-1795748590258814500-18925",
+      "createdAt": "2026-11-27T03:03:10Z",
+      "engine": "temporal"
+    }
+  ]
+}
+
+$ grpcurl (gRPC over h2c, server reflection)
+{
+  "payouts": [
+    {
+      "id": "po_ab926e8ca41648f8",
+      "merchantId": "m_ember",
+      "amountMinor": "29000",
+      "currency": "AUD",
+      "targetCurrency": "USD",
+      "bankAccount": "062-000-1234",
+      "status": "SUCCEEDED",
+      "idempotencyKey": "k-1795748590760882100-20669",
+      "createdAt": "2026-11-27T03:03:10Z",
+      "engine": "temporal"
+    },
+    {
+      "id": "po_ea1e83dad2e94083",
+      "merchantId": "m_delta",
+      "amountMinor": "28000",
+      "currency": "AUD",
+      "targetCurrency": "USD",
+      "bankAccount": "062-000-1234",
+      "status": "SUCCEEDED",
+      "idempotencyKey": "k-1795748590515645000-10316",
+      "createdAt": "2026-11-27T03:03:10Z",
+      "engine": "temporal"
+    }
+  ]
+}
+$ grpcurl list
+payout.v1.PayoutService

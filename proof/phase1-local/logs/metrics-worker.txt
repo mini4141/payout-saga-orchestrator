@@ -1,0 +1,3 @@
+payout_finalized_total{status="SUCCEEDED"} 10
+payout_step_attempts_total{outcome="ok",step="Capture"} 10
+payout_step_attempts_total{outcome="ok",step="SendBankTransfer"} 10

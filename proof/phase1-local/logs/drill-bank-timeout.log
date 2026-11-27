@@ -1,0 +1,13 @@
+03:02:39 == drill: bank timeout, retry with backoff, then success ==
+03:02:39 created payout po_2016adb51bf74222 (takes ~25 s: two 9 s client timeouts plus 1 s and 2 s backoff)
+03:03:02 attempt timeline:
+17|SendBankTransfer|1|error|Post "http://mocks:8090/bank/transfer": context deadline exceeded (Client.Timeout exceeded while awa|9016
+18|SendBankTransfer|2|error|Post "http://mocks:8090/bank/transfer": context deadline exceeded (Client.Timeout exceeded while awa|9006
+19|SendBankTransfer|3|ok||7
+03:03:04 PASS  payout SUCCEEDED (got SUCCEEDED)
+03:03:05 PASS  SendBankTransfer attempts (2 timeouts + 1 success) (got 3)
+03:03:06 PASS  failed attempts (got 2)
+03:03:06 PASS  bank holds exactly one settled transfer for the payout (got 1)
+03:03:06 PASS  retries were idempotent replays at the bank (>=2) (got 1)
+03:03:07 PASS  exactly one debit (got 1)
+03:03:07 RESULT: PASS

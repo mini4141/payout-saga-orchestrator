@@ -1,0 +1,10 @@
+.git
+.github
+.local
+proof
+infra
+docs
+node_modules
+*.md
+dist
+bin

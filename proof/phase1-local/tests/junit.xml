@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="10">
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/api" tests="0" failures="0" errors="0" id="0" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/bank" tests="0" failures="0" errors="0" id="1" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/cancelfx" tests="0" failures="0" errors="0" id="2" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/capture" tests="0" failures="0" errors="0" id="3" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/compliance" tests="0" failures="0" errors="0" id="4" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/fx" tests="0" failures="0" errors="0" id="5" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/notify" tests="0" failures="0" errors="0" id="6" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/recon" tests="0" failures="0" errors="0" id="7" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/release" tests="0" failures="0" errors="0" id="8" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/reserve" tests="0" failures="0" errors="0" id="9" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/migrate" tests="0" failures="0" errors="0" id="10" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/mocks" tests="0" failures="0" errors="0" id="11" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/ops-ui" tests="0" failures="0" errors="0" id="12" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/receiver" tests="0" failures="0" errors="0" id="13" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/relay" tests="0" failures="0" errors="0" id="14" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/cmd/worker" tests="0" failures="0" errors="0" id="15" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/db" tests="0" failures="0" errors="0" id="16" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/gen/payout/v1" tests="0" failures="0" errors="0" id="17" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/gen/payout/v1/payoutv1connect" tests="0" failures="0" errors="0" id="18" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:15+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/activities" tests="1" failures="0" errors="0" id="19" hostname="DESKTOP-LSTSC86" time="2.683" timestamp="2026-11-27T10:02:21+07:00">
+		<testcase name="TestActivityReplayReturnsStoredResult" classname="github.com/mini4141/payout-saga-orchestrator/internal/activities" time="2.240">
+			<system-out><![CDATA[2026/11/27 10:02:19 OK   00001_init.sql (311.19ms)
+2026/11/27 10:02:19 goose: successfully migrated database to version: 1
+2026/11/27 10:02:19 INFO step payout_id=p1 step=Reserve attempt=1 outcome=ok error="" ms=150
+2026/11/27 10:02:19 INFO step payout_id=p1 step=Capture attempt=1 outcome=ok error="" ms=28
+2026/11/27 10:02:19 INFO step payout_id=p1 step=Capture attempt=2 outcome=replayed error="" ms=13]]></system-out>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/api" tests="0" failures="0" errors="0" id="20" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:21+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/lambdax" tests="2" failures="0" errors="0" id="21" hostname="DESKTOP-LSTSC86" time="2.710" timestamp="2026-11-27T10:02:21+07:00">
+		<testcase name="TestHandlersHappyPath" classname="github.com/mini4141/payout-saga-orchestrator/internal/lambdax" time="1.510">
+			<system-out><![CDATA[2026/11/27 10:02:20 OK   00001_init.sql (395.98ms)
+2026/11/27 10:02:20 goose: successfully migrated database to version: 1
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Reserve attempt=1 outcome=ok error="" ms=117
+2026/11/27 10:02:20 INFO mock request method=POST path=/fx/quote idempotency_key=p1:fx ms=0
+2026/11/27 10:02:20 INFO step payout_id=p1 step=LockFX attempt=1 outcome=ok error="" ms=35
+2026/11/27 10:02:20 INFO mock request method=POST path=/compliance/screen idempotency_key=p1:screen ms=0
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Screen attempt=1 outcome=ok error="" ms=48
+2026/11/27 10:02:20 INFO mock request method=POST path=/bank/transfer idempotency_key=p1:bank ms=0
+2026/11/27 10:02:20 INFO step payout_id=p1 step=SendBankTransfer attempt=1 outcome=ok error="" ms=31
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Capture attempt=1 outcome=ok error="" ms=23
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Finalize attempt=1 outcome=ok error="" ms=38
+2026/11/27 10:02:20 INFO mock request method=GET path=/bank/settled idempotency_key="" ms=0
+2026/11/27 10:02:20 INFO reconciliation matched=1 missing=0 mismatched=0]]></system-out>
+		</testcase>
+		<testcase name="TestBankRejectedThenCompensate" classname="github.com/mini4141/payout-saga-orchestrator/internal/lambdax" time="0.600">
+			<system-out><![CDATA[2026/11/27 10:02:21 OK   00001_init.sql (122.69ms)
+2026/11/27 10:02:21 goose: successfully migrated database to version: 1
+2026/11/27 10:02:21 INFO mock request method=POST path=/admin/bank/config idempotency_key="" ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=Reserve attempt=1 outcome=ok error="" ms=37
+2026/11/27 10:02:21 INFO mock request method=POST path=/fx/quote idempotency_key=p1:fx ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=LockFX attempt=1 outcome=ok error="" ms=12
+2026/11/27 10:02:21 INFO mock request method=POST path=/compliance/screen idempotency_key=p1:screen ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=Screen attempt=1 outcome=ok error="" ms=12
+2026/11/27 10:02:21 INFO mock request method=POST path=/bank/transfer idempotency_key=p1:bank ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=SendBankTransfer attempt=1 outcome=error error="bank rejected payout p1: insufficient correspondent funds (injected)" ms=8
+2026/11/27 10:02:21 INFO mock request method=POST path=/fx/cancel idempotency_key=p1:fx-cancel ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=CancelFX attempt=1 outcome=ok error="" ms=11
+2026/11/27 10:02:21 INFO step payout_id=p1 step=Release attempt=1 outcome=ok error="" ms=17]]></system-out>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/ledger" tests="3" failures="0" errors="0" id="22" hostname="DESKTOP-LSTSC86" time="3.063" timestamp="2026-11-27T10:02:22+07:00">
+		<testcase name="TestHoldThenCaptureChangesBalance" classname="github.com/mini4141/payout-saga-orchestrator/internal/ledger" time="1.500">
+			<system-out><![CDATA[2026/11/27 10:02:20 OK   00001_init.sql (452.26ms)
+2026/11/27 10:02:20 goose: successfully migrated database to version: 1]]></system-out>
+		</testcase>
+		<testcase name="TestReleaseRestoresAvailable" classname="github.com/mini4141/payout-saga-orchestrator/internal/ledger" time="0.580">
+			<system-out><![CDATA[2026/11/27 10:02:21 OK   00001_init.sql (110.97ms)
+2026/11/27 10:02:21 goose: successfully migrated database to version: 1]]></system-out>
+		</testcase>
+		<testcase name="TestReserveRejectsInsufficientFunds" classname="github.com/mini4141/payout-saga-orchestrator/internal/ledger" time="0.360">
+			<system-out><![CDATA[2026/11/27 10:02:21 OK   00001_init.sql (121.59ms)
+2026/11/27 10:02:21 goose: successfully migrated database to version: 1]]></system-out>
+		</testcase>
+	</testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/mock" tests="0" failures="0" errors="0" id="23" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:22+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/obs" tests="0" failures="0" errors="0" id="24" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:22+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/store" tests="0" failures="0" errors="0" id="25" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:22+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/temporalx" tests="0" failures="0" errors="0" id="26" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:22+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/internal/testdb" tests="0" failures="0" errors="0" id="27" hostname="DESKTOP-LSTSC86" time="0.000" timestamp="2026-11-27T10:02:22+07:00"></testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/sfn" tests="1" failures="0" errors="0" id="28" hostname="DESKTOP-LSTSC86" time="1.828" timestamp="2026-11-27T10:02:22+07:00">
+		<testcase name="TestPayoutASLIsWellFormed" classname="github.com/mini4141/payout-saga-orchestrator/sfn" time="0.000"></testcase>
+	</testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/tests/e2e" tests="1" failures="0" errors="0" id="29" hostname="DESKTOP-LSTSC86" time="5.291" timestamp="2026-11-27T10:02:25+07:00">
+		<testcase name="TestCreatePayoutReachesSucceeded" classname="github.com/mini4141/payout-saga-orchestrator/tests/e2e" time="1.260"></testcase>
+	</testsuite>
+	<testsuite name="github.com/mini4141/payout-saga-orchestrator/workflows" tests="2" failures="0" errors="0" id="30" hostname="DESKTOP-LSTSC86" time="0.924" timestamp="2026-11-27T10:02:25+07:00">
+		<testcase name="TestPayoutWorkflowHappyPath" classname="github.com/mini4141/payout-saga-orchestrator/workflows" time="0.150">
+			<system-out><![CDATA[2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 1 ActivityType Reserve
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 2 ActivityType LockFX
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 3 ActivityType Screen
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 4 ActivityType SendBankTransfer
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 5 ActivityType Capture
+2026/11/27 10:02:20 INFO  ExecuteChildWorkflow WorkflowType NotifyWorkflow
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 7 ActivityType Finalize]]></system-out>
+		</testcase>
+		<testcase name="TestPayoutWorkflowCompensatesWhenBankRejects" classname="github.com/mini4141/payout-saga-orchestrator/workflows" time="0.010">
+			<system-out><![CDATA[2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 1 ActivityType Reserve
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 2 ActivityType LockFX
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 3 ActivityType Screen
+2026/11/27 10:02:20 ERROR Activity error. WorkflowID default-test-workflow-id RunID default-test-run-id ActivityType SendBankTransfer Attempt 1 Error bank rejected (type: BankRejected, retryable: false)
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskFailedRequest. ActivityID 4 ActivityType SendBankTransfer
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 5 ActivityType CancelFX
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 6 ActivityType Release
+2026/11/27 10:02:20 INFO  ExecuteChildWorkflow WorkflowType NotifyWorkflow
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 8 ActivityType Finalize]]></system-out>
+		</testcase>
+	</testsuite>
+</testsuites>

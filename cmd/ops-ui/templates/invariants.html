@@ -1,0 +1,17 @@
+{{define "invariants.html"}}{{template "head" .}}
+<h1>Ledger invariants</h1>
+<p class="sub">Balance must equal the sum of ledger entries, and balance must cover the open holds. No holds may remain for finished payouts.</p>
+<p class="verdict">{{if .AllOK}}<span class="chip ok">ALL INVARIANTS HOLD</span>{{else}}<span class="chip bad">INVARIANT VIOLATED</span>{{end}}</p>
+<table>
+<tr><th>Merchant</th><th class="num">Balance</th><th class="num">Sum of entries</th><th class="num">Open holds</th><th>balance = sum(entries)</th></tr>
+{{range .Rows}}
+<tr><td>{{.MerchantID}}</td><td class="num">{{money .Balance}}</td><td class="num">{{money .EntriesSum}}</td><td class="num">{{money .Held}}</td>
+<td>{{if .OK}}<span class="chip ok">OK</span>{{else}}<span class="chip bad">VIOLATED</span>{{end}}</td></tr>
+{{end}}
+</table>
+<h2>Outbox</h2>
+<table><tr><th>Event type</th><th class="num">Total</th><th class="num">Sent</th></tr>
+{{range .Outbox}}<tr><td>{{.Type}}</td><td class="num">{{.Total}}</td><td class="num">{{.Sent}}</td></tr>{{else}}<tr><td colspan="3">No events yet.</td></tr>{{end}}
+</table>
+{{if .Orphans}}<p><span class="chip bad">Orphan holds on finished payouts: {{len .Orphans}}</span></p>{{end}}
+{{template "foot"}}{{end}}

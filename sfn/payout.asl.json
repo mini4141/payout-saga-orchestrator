@@ -1,0 +1,113 @@
+{
+  "Comment": "Payout saga on Step Functions Standard: the same six steps as the Temporal PayoutWorkflow. Retry handles transient errors, Catch routes definite failures to the compensation branch.",
+  "StartAt": "Reserve",
+  "States": {
+    "Reserve": {
+      "Type": "Task",
+      "Resource": "${reserve_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.reserve",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["Transient", "States.Timeout", "Lambda.ServiceException", "Lambda.AWSLambdaException", "Lambda.SdkClientException", "Lambda.TooManyRequestsException"], "IntervalSeconds": 1, "MaxAttempts": 3, "BackoffRate": 2 }],
+      "Catch": [{ "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "FinalizeCompensated" }],
+      "Next": "LockFX"
+    },
+    "LockFX": {
+      "Type": "Task",
+      "Resource": "${fx_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.fx",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["Transient", "States.Timeout", "Lambda.ServiceException", "Lambda.AWSLambdaException", "Lambda.SdkClientException", "Lambda.TooManyRequestsException"], "IntervalSeconds": 1, "MaxAttempts": 5, "BackoffRate": 2 }],
+      "Catch": [{ "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "ReleaseOnly" }],
+      "Next": "Screen"
+    },
+    "Screen": {
+      "Type": "Task",
+      "Resource": "${compliance_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.compliance",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["Transient", "States.Timeout", "Lambda.ServiceException", "Lambda.AWSLambdaException", "Lambda.SdkClientException", "Lambda.TooManyRequestsException"], "IntervalSeconds": 1, "MaxAttempts": 5, "BackoffRate": 2 }],
+      "Catch": [{ "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "CompensateCancelFX" }],
+      "Next": "SendBankTransfer"
+    },
+    "SendBankTransfer": {
+      "Type": "Task",
+      "Resource": "${bank_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.bank",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["Transient", "States.Timeout", "Lambda.ServiceException", "Lambda.AWSLambdaException", "Lambda.SdkClientException", "Lambda.TooManyRequestsException"], "IntervalSeconds": 1, "MaxAttempts": 5, "BackoffRate": 2 }],
+      "Catch": [
+        { "ErrorEquals": ["BankRejected"], "ResultPath": "$.error", "Next": "CompensateCancelFX" },
+        { "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "FinalizeNeedsReview" }
+      ],
+      "Next": "Capture"
+    },
+    "Capture": {
+      "Type": "Task",
+      "Resource": "${capture_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.capture",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 1, "MaxAttempts": 8, "BackoffRate": 2 }],
+      "Catch": [{ "ErrorEquals": ["States.ALL"], "ResultPath": "$.error", "Next": "FinalizeNeedsReview" }],
+      "Next": "FinalizeSucceeded"
+    },
+    "FinalizeSucceeded": {
+      "Type": "Task",
+      "Resource": "${notify_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id", "outcome": "SUCCEEDED", "reason": "" },
+      "ResultPath": "$.steps.finalize",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 1, "MaxAttempts": 8, "BackoffRate": 2 }],
+      "End": true
+    },
+    "CompensateCancelFX": {
+      "Type": "Task",
+      "Resource": "${cancelfx_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.cancelfx",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 1, "MaxAttempts": 8, "BackoffRate": 2 }],
+      "Next": "CompensateRelease"
+    },
+    "CompensateRelease": {
+      "Type": "Task",
+      "Resource": "${release_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.release",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 1, "MaxAttempts": 8, "BackoffRate": 2 }],
+      "Next": "FinalizeCompensated"
+    },
+    "ReleaseOnly": {
+      "Type": "Task",
+      "Resource": "${release_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id" },
+      "ResultPath": "$.steps.release",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 1, "MaxAttempts": 8, "BackoffRate": 2 }],
+      "Next": "FinalizeCompensated"
+    },
+    "FinalizeCompensated": {
+      "Type": "Task",
+      "Resource": "${notify_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id", "outcome": "COMPENSATED", "reason.$": "$.error.Error" },
+      "ResultPath": "$.steps.finalize",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 1, "MaxAttempts": 8, "BackoffRate": 2 }],
+      "End": true
+    },
+    "FinalizeNeedsReview": {
+      "Type": "Task",
+      "Resource": "${notify_arn}",
+      "Parameters": { "payout_id.$": "$.payout_id", "outcome": "NEEDS_REVIEW", "reason": "bank outcome unknown after retries" },
+      "ResultPath": "$.steps.finalize",
+      "TimeoutSeconds": 20,
+      "Retry": [{ "ErrorEquals": ["States.ALL"], "IntervalSeconds": 1, "MaxAttempts": 8, "BackoffRate": 2 }],
+      "End": true
+    }
+  }
+}

@@ -1,0 +1,51 @@
+03:03:08 == drill: kill the worker during SendBankTransfer ==
+03:03:10 created 10 payouts: po_842fd8dd76894c50 po_72fd22416d2b40a8 po_a6e4903750254395 po_0d55f7a4af854a76 po_27a6a1dedaf24cb1 po_0accd0114ec94225 po_c4a1e0d2b24b487a po_da15d458f26d4f59 po_ea1e83dad2e94083 po_ab926e8ca41648f8
+03:03:11 waiting until transfers are in flight at the bank
+03:03:11 bank in-flight transfers: 10; killing worker NOW
+ Container payout-saga-worker-1 Killing 
+ Container payout-saga-worker-1 Killed 
+03:03:16 worker is down; payouts in flight:
+po_0accd0114ec94225|PROCESSING
+po_0d55f7a4af854a76|PROCESSING
+po_27a6a1dedaf24cb1|PROCESSING
+po_72fd22416d2b40a8|PROCESSING
+po_842fd8dd76894c50|PROCESSING
+po_a6e4903750254395|PROCESSING
+po_ab926e8ca41648f8|PROCESSING
+po_c4a1e0d2b24b487a|PROCESSING
+po_da15d458f26d4f59|PROCESSING
+po_ea1e83dad2e94083|PROCESSING
+03:03:17 restarting worker
+ Container payout-saga-mocks-1 Running 
+ Container payout-saga-postgres-1 Running 
+ Container payout-saga-temporal-1 Running 
+ Container payout-saga-postgres-1 Waiting 
+ Container payout-saga-postgres-1 Healthy 
+ Container payout-saga-migrate-1 Starting 
+ Container payout-saga-migrate-1 Started 
+ Container payout-saga-temporal-1 Waiting 
+ Container payout-saga-migrate-1 Waiting 
+ Container payout-saga-migrate-1 Exited 
+ Container payout-saga-temporal-1 Healthy 
+ Container payout-saga-worker-1 Starting 
+ Container payout-saga-worker-1 Started 
+03:03:27 final statuses:
+SUCCEEDED|10
+03:03:28 SendBankTransfer attempts per payout (a 'lost' attempt is the one the killed worker never finished):
+po_0accd0114ec94225|1:started 2:ok
+po_0d55f7a4af854a76|1:started 2:ok
+po_27a6a1dedaf24cb1|1:started 2:ok
+po_72fd22416d2b40a8|1:started 2:ok
+po_842fd8dd76894c50|1:started 2:ok
+po_a6e4903750254395|1:started 2:ok
+po_ab926e8ca41648f8|1:started 2:ok
+po_c4a1e0d2b24b487a|1:started 2:ok
+po_da15d458f26d4f59|1:started 2:ok
+po_ea1e83dad2e94083|1:started 2:ok
+03:03:29 bank state: {"bank_transfers":13,"bank_settled":12,"idempotent_replays":{"bank":12},"calls":{"bank":25,"compliance":13,"fx":14}}
+03:03:30 PASS  all 10 payouts SUCCEEDED (got 10)
+03:03:31 PASS  exactly one debit per payout (no double spend) (got 10)
+03:03:32 PASS  payouts with more than one debit (got 0)
+03:03:32 PASS  bank settled each of the 10 payouts exactly once (got 10)
+03:03:32 PASS  retries after the kill were served by the bank's idempotency record (>0) (got 1)
+03:03:33 RESULT: PASS

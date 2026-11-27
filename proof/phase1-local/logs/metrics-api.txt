@@ -1,0 +1,3 @@
+# HELP api_requests_total Connect requests.
+api_requests_total{code="ok",procedure="/payout.v1.PayoutService/CreatePayout"} 14
+api_requests_total{code="ok",procedure="/payout.v1.PayoutService/GetPayout"} 2

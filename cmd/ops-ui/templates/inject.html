@@ -1,0 +1,28 @@
+{{define "inject.html"}}{{template "head" .}}
+<h1>Failure injection</h1>
+<p class="sub">Per-mock admin API. Changes apply to the next calls. "Next N" counters count down as calls arrive.</p>
+<div class="grid3">
+{{range $svc := .Services}}{{with index $.Config $svc}}
+<form class="card" method="post" action="/inject/{{$svc}}">
+<b style="font-size:16px;text-transform:uppercase">{{$svc}}</b>
+<span class="mono" style="float:right">{{index $.Calls $svc}} calls · {{index $.Replays $svc}} replays</span>
+<label>Fail rate (HTTP 503) <output>{{pct .FailRate}}</output>%</label>
+<input type="range" name="fail_rate" min="0" max="100" value="{{pct .FailRate}}" oninput="this.previousElementSibling.firstElementChild.value=this.value">
+<label>Latency <output>{{.LatencyMS}}</output> ms</label>
+<input type="range" name="latency_ms" min="0" max="8000" step="100" value="{{.LatencyMS}}" oninput="this.previousElementSibling.firstElementChild.value=this.value">
+<label>Error next N calls <output>{{.ErrorNext}}</output></label>
+<input type="range" name="error_next" min="0" max="10" value="{{.ErrorNext}}" oninput="this.previousElementSibling.firstElementChild.value=this.value">
+{{if ne $svc "fx"}}
+<label>{{if eq $svc "bank"}}Reject next N transfers{{else}}Block next N screenings{{end}} <output>{{.RejectNext}}</output></label>
+<input type="range" name="reject_next" min="0" max="10" value="{{.RejectNext}}" oninput="this.previousElementSibling.firstElementChild.value=this.value">
+{{end}}
+{{if eq $svc "bank"}}
+<label>Time out next N transfers (processed, reply lost) <output>{{.TimeoutNext}}</output></label>
+<input type="range" name="timeout_next" min="0" max="5" value="{{.TimeoutNext}}" oninput="this.previousElementSibling.firstElementChild.value=this.value">
+{{end}}
+<p><button type="submit">Apply to {{$svc}}</button></p>
+</form>
+{{end}}{{end}}
+</div>
+<form method="post" action="/inject-reset"><button class="ghost" type="submit">Reset all mocks</button></form>
+{{template "foot"}}{{end}}

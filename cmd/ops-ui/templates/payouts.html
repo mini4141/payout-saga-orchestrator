@@ -1,0 +1,21 @@
+{{define "payouts.html"}}{{template "head" .}}
+<h1>Payouts</h1>
+<p class="sub">Live list (refreshes every 2 s). Each payout is a Temporal workflow <code>payout-&lt;id&gt;</code>.</p>
+<p><form class="inline" method="post" action="/demo/payouts"><input type="hidden" name="n" value="10"><button type="submit">Create 10 demo payouts</button></form></p>
+<div id="table" hx-get="/fragments/payouts" hx-trigger="every 2s" hx-swap="innerHTML">
+{{template "payouts_table" .}}
+</div>
+{{template "foot"}}{{end}}
+
+{{define "payouts_table"}}
+<div class="stats">
+{{range $k, $v := .Counts}}<div class="stat"><span class="chip {{lower $k}}">{{$k}}</span><b>{{$v}}</b></div>{{end}}
+</div>
+<table>
+<tr><th>Payout</th><th>Merchant</th><th class="num">Amount</th><th>Ccy</th><th>Engine</th><th>Status</th><th>Created</th></tr>
+{{range .Payouts}}
+<tr><td><a class="mono" href="/payouts/{{.ID}}">{{.ID}}</a></td><td>{{.MerchantID}}</td><td class="num">{{money .AmountMinor}}</td>
+<td>{{.Currency}} → {{.TargetCurrency}}</td><td>{{.Engine}}</td><td><span class="chip {{lower .Status}}">{{.Status}}</span></td><td class="mono">{{ts .CreatedAt}}</td></tr>
+{{else}}<tr><td colspan="7">No payouts yet. Create some with the button above.</td></tr>{{end}}
+</table>
+{{end}}

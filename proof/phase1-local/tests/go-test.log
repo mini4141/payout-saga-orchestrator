@@ -1,0 +1,110 @@
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/api	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/bank	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/cancelfx	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/capture	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/compliance	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/fx	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/notify	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/recon	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/release	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/lambdas/reserve	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/migrate	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/mocks	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/ops-ui	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/receiver	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/relay	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/cmd/worker	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/db	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/gen/payout/v1	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/gen/payout/v1/payoutv1connect	[no test files]
+=== RUN   TestActivityReplayReturnsStoredResult
+2026/11/27 10:02:19 OK   00001_init.sql (311.19ms)
+2026/11/27 10:02:19 goose: successfully migrated database to version: 1
+2026/11/27 10:02:19 INFO step payout_id=p1 step=Reserve attempt=1 outcome=ok error="" ms=150
+2026/11/27 10:02:19 INFO step payout_id=p1 step=Capture attempt=1 outcome=ok error="" ms=28
+2026/11/27 10:02:19 INFO step payout_id=p1 step=Capture attempt=2 outcome=replayed error="" ms=13
+--- PASS: TestActivityReplayReturnsStoredResult (2.24s)
+PASS
+ok  	github.com/mini4141/payout-saga-orchestrator/internal/activities	2.683s
+?   	github.com/mini4141/payout-saga-orchestrator/internal/api	[no test files]
+=== RUN   TestHandlersHappyPath
+2026/11/27 10:02:20 OK   00001_init.sql (395.98ms)
+2026/11/27 10:02:20 goose: successfully migrated database to version: 1
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Reserve attempt=1 outcome=ok error="" ms=117
+2026/11/27 10:02:20 INFO mock request method=POST path=/fx/quote idempotency_key=p1:fx ms=0
+2026/11/27 10:02:20 INFO step payout_id=p1 step=LockFX attempt=1 outcome=ok error="" ms=35
+2026/11/27 10:02:20 INFO mock request method=POST path=/compliance/screen idempotency_key=p1:screen ms=0
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Screen attempt=1 outcome=ok error="" ms=48
+2026/11/27 10:02:20 INFO mock request method=POST path=/bank/transfer idempotency_key=p1:bank ms=0
+2026/11/27 10:02:20 INFO step payout_id=p1 step=SendBankTransfer attempt=1 outcome=ok error="" ms=31
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Capture attempt=1 outcome=ok error="" ms=23
+2026/11/27 10:02:20 INFO step payout_id=p1 step=Finalize attempt=1 outcome=ok error="" ms=38
+2026/11/27 10:02:20 INFO mock request method=GET path=/bank/settled idempotency_key="" ms=0
+2026/11/27 10:02:20 INFO reconciliation matched=1 missing=0 mismatched=0
+--- PASS: TestHandlersHappyPath (1.51s)
+=== RUN   TestBankRejectedThenCompensate
+2026/11/27 10:02:21 OK   00001_init.sql (122.69ms)
+2026/11/27 10:02:21 goose: successfully migrated database to version: 1
+2026/11/27 10:02:21 INFO mock request method=POST path=/admin/bank/config idempotency_key="" ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=Reserve attempt=1 outcome=ok error="" ms=37
+2026/11/27 10:02:21 INFO mock request method=POST path=/fx/quote idempotency_key=p1:fx ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=LockFX attempt=1 outcome=ok error="" ms=12
+2026/11/27 10:02:21 INFO mock request method=POST path=/compliance/screen idempotency_key=p1:screen ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=Screen attempt=1 outcome=ok error="" ms=12
+2026/11/27 10:02:21 INFO mock request method=POST path=/bank/transfer idempotency_key=p1:bank ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=SendBankTransfer attempt=1 outcome=error error="bank rejected payout p1: insufficient correspondent funds (injected)" ms=8
+2026/11/27 10:02:21 INFO mock request method=POST path=/fx/cancel idempotency_key=p1:fx-cancel ms=0
+2026/11/27 10:02:21 INFO step payout_id=p1 step=CancelFX attempt=1 outcome=ok error="" ms=11
+2026/11/27 10:02:21 INFO step payout_id=p1 step=Release attempt=1 outcome=ok error="" ms=17
+--- PASS: TestBankRejectedThenCompensate (0.60s)
+PASS
+ok  	github.com/mini4141/payout-saga-orchestrator/internal/lambdax	2.710s
+=== RUN   TestHoldThenCaptureChangesBalance
+2026/11/27 10:02:20 OK   00001_init.sql (452.26ms)
+2026/11/27 10:02:20 goose: successfully migrated database to version: 1
+--- PASS: TestHoldThenCaptureChangesBalance (1.50s)
+=== RUN   TestReleaseRestoresAvailable
+2026/11/27 10:02:21 OK   00001_init.sql (110.97ms)
+2026/11/27 10:02:21 goose: successfully migrated database to version: 1
+--- PASS: TestReleaseRestoresAvailable (0.58s)
+=== RUN   TestReserveRejectsInsufficientFunds
+2026/11/27 10:02:21 OK   00001_init.sql (121.59ms)
+2026/11/27 10:02:21 goose: successfully migrated database to version: 1
+--- PASS: TestReserveRejectsInsufficientFunds (0.36s)
+PASS
+ok  	github.com/mini4141/payout-saga-orchestrator/internal/ledger	3.063s
+?   	github.com/mini4141/payout-saga-orchestrator/internal/mock	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/internal/obs	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/internal/store	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/internal/temporalx	[no test files]
+?   	github.com/mini4141/payout-saga-orchestrator/internal/testdb	[no test files]
+=== RUN   TestPayoutASLIsWellFormed
+--- PASS: TestPayoutASLIsWellFormed (0.00s)
+PASS
+ok  	github.com/mini4141/payout-saga-orchestrator/sfn	1.828s
+=== RUN   TestCreatePayoutReachesSucceeded
+--- PASS: TestCreatePayoutReachesSucceeded (1.26s)
+PASS
+ok  	github.com/mini4141/payout-saga-orchestrator/tests/e2e	5.291s
+=== RUN   TestPayoutWorkflowHappyPath
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 1 ActivityType Reserve
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 2 ActivityType LockFX
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 3 ActivityType Screen
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 4 ActivityType SendBankTransfer
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 5 ActivityType Capture
+2026/11/27 10:02:20 INFO  ExecuteChildWorkflow WorkflowType NotifyWorkflow
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 7 ActivityType Finalize
+--- PASS: TestPayoutWorkflowHappyPath (0.15s)
+=== RUN   TestPayoutWorkflowCompensatesWhenBankRejects
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 1 ActivityType Reserve
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 2 ActivityType LockFX
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 3 ActivityType Screen
+2026/11/27 10:02:20 ERROR Activity error. WorkflowID default-test-workflow-id RunID default-test-run-id ActivityType SendBankTransfer Attempt 1 Error bank rejected (type: BankRejected, retryable: false)
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskFailedRequest. ActivityID 4 ActivityType SendBankTransfer
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 5 ActivityType CancelFX
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 6 ActivityType Release
+2026/11/27 10:02:20 INFO  ExecuteChildWorkflow WorkflowType NotifyWorkflow
+2026/11/27 10:02:20 DEBUG handleActivityResult: *workflowservice.RespondActivityTaskCompletedRequest. ActivityID 8 ActivityType Finalize
+--- PASS: TestPayoutWorkflowCompensatesWhenBankRejects (0.01s)
+PASS
+ok  	github.com/mini4141/payout-saga-orchestrator/workflows	0.924s

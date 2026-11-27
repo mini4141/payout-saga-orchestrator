@@ -2,7 +2,7 @@
 
 One line per decision: date, decision, reason.
 
-- 2026-11-27 Go toolchain on host is 1.27.4; `go.mod` targets `go 1.25` and Docker builds use `golang:1.25`. Reason: spec pins Go 1.25.
+- 2026-11-27 Go 1.26 instead of 1.25 (`go.mod` says `go 1.26.0`, Docker builds use `golang:1.26`, CI uses 1.26). Reason: current releases of the Temporal SDK, OpenTelemetry, grpc, goose, connect and prometheus all require Go 1.26; pinning old versions of all of them would be worse. Host toolchain is 1.27.4.
 - 2026-11-27 Temporal CLI is not installed; the Temporal dev server runs as the official `temporalio/temporal:1.10.1` image (`server start-dev`) in compose and on Fargate. Reason: same `start-dev` server, no host install needed.
 - 2026-11-27 One multi-binary Docker image (`payout-saga`) holds every service; compose/ECS pick the binary with `command`. Reason: one build, one ECR repo.
 - 2026-11-27 One `cmd/mocks` process serves FX, compliance and bank mocks on one port with path prefixes from SPECS §7. Reason: simplest option that keeps three mocks with separate admin APIs.

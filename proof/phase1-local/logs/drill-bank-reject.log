@@ -1,0 +1,19 @@
+03:02:25 == drill: bank rejects the transfer ==
+03:02:27 created payout po_2f00a5ec900240e9
+03:02:28 attempt timeline:
+7|Reserve|1|ok|
+8|LockFX|1|ok|
+9|Screen|1|ok|
+10|SendBankTransfer|1|error|bank rejected payout po_2f00a5ec900240e9: insufficient correspondent funds (injected)
+11|CancelFX|1|ok|
+12|Release|1|ok|
+13|Finalize|1|ok|
+03:02:30 PASS  payout ends COMPENSATED (got COMPENSATED)
+03:02:31 PASS  hold released (no hold row) (got 0)
+03:02:32 PASS  merchant balance unchanged (got 3000000)
+03:02:33 PASS  no debit entry written (got 0)
+03:02:34 PASS  FX lock cancelled at the mock (got 1)
+03:02:35 PASS  compensations ran in reverse order (got CancelFX>Release)
+03:02:36 PASS  bank was not retried after BankRejected (SendBankTransfer attempts) (got 1)
+03:02:38 PASS  payout.failed event written to the outbox (got 1)
+03:02:39 RESULT: PASS
