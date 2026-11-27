@@ -1,0 +1,52 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.12-alpine
+        env:
+          POSTGRES_USER: payout
+          POSTGRES_PASSWORD: payout
+          POSTGRES_DB: payout
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U payout" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgres://payout:payout@localhost:5432/payout?sslmode=disable
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.25"
+      - uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+      - name: Install code generators
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+          go install connectrpc.com/connect/cmd/protoc-gen-connect-go@latest
+          go install github.com/jstemmer/go-junit-report/v2@latest
+      - name: Proto lint and generate
+        run: |
+          buf lint
+          buf generate
+          git diff --exit-code gen
+      - name: Build and vet
+        run: go build ./... && go vet ./...
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform fmt and validate
+        run: |
+          terraform -chdir=infra fmt -check -recursive
+          terraform -chdir=infra init -backend=false
+          terraform -chdir=infra validate
+      - name: Tests (cloud-free)
+        run: bash scripts/test-all.sh --ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-reports
+          path: proof/phase1-local/tests

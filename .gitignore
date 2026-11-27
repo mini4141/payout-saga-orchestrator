@@ -1,0 +1,18 @@
+.env
+.local/
+bin/
+dist/
+node_modules/
+*.exe
+*.test
+coverage.out
+# Terraform
+infra/.terraform/
+infra/*.tfstate
+infra/*.tfstate.*
+infra/*.tfvars
+infra/build/
+infra/tfplan
+# Playwright
+playwright-report/
+test-results/
