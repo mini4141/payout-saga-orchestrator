@@ -4,7 +4,7 @@ Resume from here after a restart. Tick items as they are done.
 
 ## Phase status
 - [x] Phase 0 scaffold
-- [ ] Phase 1 local (tests green: DONE, proof: DONE, CI green on main: pending)
+- [x] Phase 1 local (tests green, CI green, proof index complete)
 - [ ] Phase 2 AWS showcase
 - [ ] Phase 3 destroy + verify
 - [ ] Phase 4 write-up
@@ -49,7 +49,7 @@ Resume from here after a restart. Tick items as they are done.
 - [x] `screenshots/06-invariants.png`
 - [x] `screenshots/07-temporal-ui.png`
 - [x] `scripts/test-all.sh` green
-- [ ] CI green on `main`
+- [x] CI green on `main`
 
 ## Phase 2 proof (SPECS §10)
 - [ ] `screenshots/01-cloud-ops-ui.png`
